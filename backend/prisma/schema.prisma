@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -12,11 +7,197 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model Address {
+  AddressId   Int         @id @default(autoincrement())
+  UserId      Int
+  Street      String      @db.VarChar(255)
+  City        String      @db.VarChar(100)
+  State       String?     @db.VarChar(100)
+  ZipCode     String      @db.VarChar(20)
+  UserProfile UserProfile @relation(fields: [UserId], references: [UserId], onDelete: Cascade, onUpdate: NoAction)
 }
 
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model Cart {
+  CartId      Int         @id @default(autoincrement())
+  UserId      Int
+  ProductId   Int
+  Quantity    Int         @default(1)
+  Product     Product     @relation(fields: [ProductId], references: [ProductId], onDelete: Cascade, onUpdate: NoAction)
+  UserProfile UserProfile @relation(fields: [UserId], references: [UserId], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([UserId, ProductId], map: "UQ_Cart_User_Product")
+}
+
+model Category {
+  CategoryId   Int       @id @default(autoincrement())
+  CategoryName String    @db.VarChar(150)
+  Coupon       Coupon[]
+  Product      Product[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model Coupon {
+  CouponId       Int           @id @default(autoincrement())
+  CouponCode     String        @unique @db.VarChar(50)
+  DiscountAmount Decimal       @db.Decimal(10, 2)
+  ExpiryDate     DateTime      @db.Date
+  ProductId      Int?
+  CategoryId     Int?
+  Category       Category?     @relation(fields: [CategoryId], references: [CategoryId], onUpdate: NoAction)
+  Product        Product?      @relation(fields: [ProductId], references: [ProductId], onUpdate: NoAction)
+  OrderCoupon    OrderCoupon[]
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model OrderCoupon {
+  OrderCouponId Int     @id @default(autoincrement())
+  OrderId       Int
+  CouponId      Int?
+  Coupon        Coupon? @relation(fields: [CouponId], references: [CouponId], onUpdate: NoAction)
+  Orders        Orders  @relation(fields: [OrderId], references: [OrderId], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model OrderItem {
+  OrderItemId Int     @id @default(autoincrement())
+  OrderId     Int
+  ProductId   Int
+  Quantity    Int
+  Price       Decimal @db.Decimal(10, 2)
+  TotalCost   Decimal @db.Decimal(10, 2)
+  Orders      Orders  @relation(fields: [OrderId], references: [OrderId], onDelete: Cascade, onUpdate: NoAction)
+  Product     Product @relation(fields: [ProductId], references: [ProductId], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model OrderStatus {
+  StatusId   Int       @id @default(autoincrement())
+  OrderId    Int
+  StatusName String    @db.VarChar(50)
+  CreatedAt  DateTime? @default(now()) @db.Timestamptz(6)
+  Orders     Orders    @relation(fields: [OrderId], references: [OrderId], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model Orders {
+  OrderId            Int                  @id @default(autoincrement())
+  UserId             Int?
+  OrderDate          DateTime?            @default(now()) @db.Timestamptz(6)
+  TotalAmount        Decimal              @db.Decimal(10, 2)
+  OrderCoupon        OrderCoupon[]
+  OrderItem          OrderItem[]
+  OrderStatus        OrderStatus[]
+  UserProfile        UserProfile?         @relation(fields: [UserId], references: [UserId], onUpdate: NoAction)
+  PaymentInformation PaymentInformation[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model PaymentInformation {
+  PaymentId     Int       @id @default(autoincrement())
+  OrderId       Int
+  PaymentAmount Decimal   @db.Decimal(10, 2)
+  PaymentDate   DateTime? @default(now()) @db.Timestamptz(6)
+  PaymentMethod String    @db.VarChar(50)
+  Orders        Orders    @relation(fields: [OrderId], references: [OrderId], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model Product {
+  ProductId     Int             @id @default(autoincrement())
+  ProductName   String          @db.VarChar(255)
+  Price         Decimal         @db.Decimal(10, 2)
+  Quantity      Int             @default(0)
+  CategoryId    Int?
+  IsActive      Boolean?        @default(true)
+  CreatedAt     DateTime?       @default(now()) @db.Timestamptz(6)
+  Cart          Cart[]
+  Coupon        Coupon[]
+  OrderItem     OrderItem[]
+  Category      Category?       @relation(fields: [CategoryId], references: [CategoryId], onUpdate: NoAction)
+  ProductImage  ProductImage[]
+  ProductReview ProductReview[]
+  Wishlist      Wishlist[]
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model ProductImage {
+  ImageId   Int     @id @default(autoincrement())
+  ProductId Int
+  ImageUrl  String
+  Product   Product @relation(fields: [ProductId], references: [ProductId], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model ProductReview {
+  ReviewId    Int         @id @default(autoincrement())
+  ProductId   Int
+  UserId      Int
+  Rating      Int?
+  ReviewText  String?
+  ReviewDate  DateTime?   @default(now()) @db.Timestamptz(6)
+  Product     Product     @relation(fields: [ProductId], references: [ProductId], onDelete: Cascade, onUpdate: NoAction)
+  UserProfile UserProfile @relation(fields: [UserId], references: [UserId], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Roles {
+  RoleId   Int        @id @default(autoincrement())
+  RoleName String     @db.VarChar(50)
+  UserRole UserRole[]
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model UserActivityLog {
+  LogId               Int          @id @default(autoincrement())
+  UserId              Int?
+  ActivityType        String       @db.VarChar(100)
+  ActivityDescription String?
+  LogDate             DateTime?    @default(now()) @db.Timestamptz(6)
+  UserProfile         UserProfile? @relation(fields: [UserId], references: [UserId], onUpdate: NoAction)
+}
+
+model UserProfile {
+  UserId          Int               @id @default(autoincrement())
+  DisplayName     String?           @db.VarChar(100)
+  FirstName       String?           @db.VarChar(100)
+  LastName        String?           @db.VarChar(100)
+  Email           String            @unique @db.VarChar(255)
+  AuthId          String?           @db.VarChar(255)
+  Address         Address[]
+  Cart            Cart[]
+  Orders          Orders[]
+  ProductReview   ProductReview[]
+  UserActivityLog UserActivityLog[]
+  UserRole        UserRole[]
+  Wishlist        Wishlist[]
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model UserRole {
+  UserRoleId  Int         @id @default(autoincrement())
+  RoleId      Int
+  UserId      Int
+  Roles       Roles       @relation(fields: [RoleId], references: [RoleId], onDelete: Cascade, onUpdate: NoAction)
+  UserProfile UserProfile @relation(fields: [UserId], references: [UserId], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([UserId, RoleId], map: "UQ_UserRole_User_Role")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model Wishlist {
+  WishlistId  Int         @id @default(autoincrement())
+  UserId      Int
+  ProductId   Int
+  Product     Product     @relation(fields: [ProductId], references: [ProductId], onDelete: Cascade, onUpdate: NoAction)
+  UserProfile UserProfile @relation(fields: [UserId], references: [UserId], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([UserId, ProductId], map: "UQ_Wishlist_User_Product")
+}
