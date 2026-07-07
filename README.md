@@ -78,3 +78,50 @@ Pour utiliser Prisma pour la communication entre le backend et la base de donné
    ```bash
    npx prisma migrate dev --name init
    ```
+
+---
+
+## 🔐 Système d'Authentification (Bcrypt & JWT)
+
+L'authentification du projet a été implémentée avec succès en utilisant **bcryptjs** pour le hachage des mots de passe et **JSON Web Tokens (JWT)** pour la gestion des sessions.
+
+### Configuration requise (.env)
+Avant de lancer le serveur, assurez-vous que les variables suivantes sont configurées dans votre fichier `backend/.env` :
+```env
+JWT_SECRET=votre_cle_secrete_super_securisee
+JWT_EXPIRES_IN=1h
+```
+
+### Endpoints de l'API
+
+#### 1. Inscription d'un utilisateur
+* **URL :** `POST /api/auth/register`
+* **Corps (JSON) :**
+  ```json
+  {
+    "email": "utilisateur@exemple.com",
+    "password": "MotDePasseSecurise123",
+    "displayName": "Nom d'affichage",
+    "firstName": "Prénom",
+    "lastName": "Nom"
+  }
+  ```
+* **Réponse (201 Created) :** Retourne le profil utilisateur créé (sans le hash du mot de passe).
+
+#### 2. Connexion
+* **URL :** `POST /api/auth/login`
+* **Corps (JSON) :**
+  ```json
+  {
+    "email": "utilisateur@exemple.com",
+    "password": "MotDePasseSecurise123"
+  }
+  ```
+* **Réponse (200 OK) :** Retourne le token JWT d'accès et les informations de l'utilisateur.
+
+#### 3. Profil connecté (Route Protégée)
+* **URL :** `GET /api/auth/me`
+* **En-têtes (Headers) :**
+  * `Authorization: Bearer <votre_token_jwt>`
+* **Réponse (200 OK) :** Retourne les informations de l'utilisateur associé au token.
+
