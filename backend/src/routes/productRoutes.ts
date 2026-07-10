@@ -1,9 +1,12 @@
 import { Router } from 'express';
-import { getProducts } from '../controllers/productController.js';
+import { getProducts, getProductById } from '../controllers/productController.js';
 
 const router = Router();
 
-// Route pour lister les produits avec pagination et filtres
+// Route pour lister les produits avec pagination et filtres (gère aussi ?search=...)
 router.get('/', getProducts);
+
+// Route pour récupérer les détails d'un produit spécifique
+router.get('/:id', getProductById);
 
 export default router;

@@ -99,3 +99,68 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
     });
   }
 };
+
+/**
+ * Récupère les détails d'un produit spécifique par son identifiant
+ */
+export const getProductById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const id = parseInt(req.params.id as string);
+    
+    if (isNaN(id)) {
+      res.status(400).json({
+        success: false,
+        message: "L'identifiant du produit fourni est invalide."
+      });
+      return;
+    }
+
+    const product = await prisma.product.findUnique({
+      where: {
+        ProductId: id,
+      },
+      include: {
+        Category: {
+          select: {
+            CategoryId: true,
+            CategoryName: true,
+          },
+        },
+        ProductImage: {
+          select: {
+            ImageId: true,
+            ImageUrl: true,
+          },
+        },
+        ProductReview: {
+          include: {
+            UserProfile: {
+              select: {
+                DisplayName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!product) {
+      res.status(404).json({
+        success: false,
+        message: "Le produit demandé n'existe pas."
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      data: product,
+    });
+  } catch (error: any) {
+    console.error('Erreur lors de la récupération du produit:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Une erreur interne est survenue lors de la récupération des détails du produit.',
+    });
+  }
+};
