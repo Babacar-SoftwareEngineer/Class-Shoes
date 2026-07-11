@@ -125,3 +125,22 @@ JWT_EXPIRES_IN=1h
   * `Authorization: Bearer <votre_token_jwt>`
 * **Réponse (200 OK) :** Retourne les informations de l'utilisateur associé au token.
 
+---
+
+## 🛒 Gestion du Panier (Zustand & State Management)
+
+L'état global du panier côté client a été implémenté à l'aide de **Zustand** avec persistance locale (`localStorage`) et résolution des problèmes d'hydratation (Next.js SSR).
+
+### Architecture des fichiers créés :
+1. **Types du Panier** : [cart.ts](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/types/cart.ts) - Définition de l'interface `CartItem`.
+2. **Store Global** : [useCartStore.ts](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/store/useCartStore.ts) - Actions d'ajout d'articles (avec validation de stock), de mise à jour des quantités, de suppression, de nettoyage et sélecteurs de totaux.
+3. **Hook Hydration-Safe** : [useCart.ts](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/hooks/useCart.ts) - Hook personnalisé empêchant les erreurs de mismatch d'hydratation serveur/client.
+
+### Éléments d'interface utilisateur intégrés :
+* **Bouton d'Ajout** : [AddToCartButton.tsx](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/components/AddToCartButton.tsx) - Composant client fonctionnel sur la grille des produits.
+* **Header / Barre de Navigation** : [Header.tsx](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/components/Header.tsx) - Intègre un badge réactif avec animation affichant le nombre d'articles dans le panier.
+* **Page Panier** : `/cart` ([page.tsx](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/app/cart/page.tsx)) - Permet de revoir le panier, modifier les quantités, supprimer des articles individuels ou vider entièrement le panier.
+
+*Note : En cas d'indisponibilité du serveur backend, le service de produits (`productService.ts`) bascule automatiquement sur des données mockées dynamiques pour permettre de tester l'intégralité du tunnel de panier localement.*
+
+

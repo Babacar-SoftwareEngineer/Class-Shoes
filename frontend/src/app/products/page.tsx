@@ -1,6 +1,7 @@
 import { getProducts, ProductFilters, Product } from '../../services/productService';
 import Link from 'next/link';
 import Image from 'next/image';
+import AddToCartButton from '../../components/AddToCartButton';
 
 interface PageProps {
   searchParams: Promise<{
@@ -318,16 +319,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                             </span>
                           </div>
                           
-                          <button 
-                            disabled={product.Quantity === 0}
-                            className={`p-2.5 rounded-xl border transition-all ${
-                              product.Quantity === 0 
-                                ? 'border-zinc-100 dark:border-zinc-800 text-zinc-300 dark:text-zinc-600 cursor-not-allowed'
-                                : 'border-zinc-200 dark:border-zinc-800 hover:bg-violet-600 hover:text-white dark:hover:bg-violet-600 hover:border-violet-600 dark:hover:border-violet-600'
-                            }`}
-                          >
-                            🛒
-                          </button>
+                          <AddToCartButton product={product} />
                         </div>
                       </div>
                     </div>
