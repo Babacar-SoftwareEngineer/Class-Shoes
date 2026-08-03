@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwt.js';
+import { UnauthorizedError, ForbiddenError } from '../errors/AppError.js';
 
-// Interface pour étendre Request d'Express avec l'utilisateur authentifié
 export interface AuthenticatedRequest extends Request {
   user?: {
     userId: number;
@@ -14,15 +14,14 @@ export interface AuthenticatedRequest extends Request {
  */
 export function authenticateToken(
   req: AuthenticatedRequest,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): void {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1]; // Format: Bearer <token>
 
   if (!token) {
-    res.status(401).json({ error: "Accès non autorisé. Token manquant." });
-    return;
+    throw new UnauthorizedError('Accès non autorisé. Token manquant.');
   }
 
   try {
@@ -30,7 +29,6 @@ export function authenticateToken(
     req.user = decoded;
     next();
   } catch (error) {
-    res.status(403).json({ error: "Jeton d'accès invalide ou expiré." });
-    return;
+    throw new ForbiddenError("Jeton d'accès invalide ou expiré.");
   }
 }

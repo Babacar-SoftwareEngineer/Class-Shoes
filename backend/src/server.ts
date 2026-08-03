@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import { errorHandler } from './middlewares/error.middleware.js';
 
 // Chargement des variables d'environnement
 dotenv.config();
@@ -20,9 +21,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 
 // Route de test
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (_req: Request, res: Response) => {
     res.json({ message: "Le serveur e-commerce est en ligne !" });
 });
+
+// Middleware d'erreur centralisé (déclaré après toutes les routes)
+app.use(errorHandler);
 
 // Démarrage du serveur
 app.listen(PORT, () => {

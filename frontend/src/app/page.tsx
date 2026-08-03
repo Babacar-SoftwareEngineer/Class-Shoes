@@ -1,65 +1,145 @@
-import Image from "next/image";
+import HeroSection from '../components/home/HeroSection';
+import CategoryBar from '../components/home/CategoryBar';
+import ProductGrid, { ProductCardData } from '../components/home/ProductGrid';
+import EditorialSection from '../components/home/EditorialSection';
+import { getProducts, Product } from '../services/productService';
 
-export default function Home() {
+const FALLBACK_HOME_CARDS: ProductCardData[] = [
+  {
+    id: 1001,
+    name: 'Mini sac à chaîne noir',
+    price: 129,
+    image: 'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?auto=format&fit=crop&w=1200&q=80',
+    category: 'Sacs à main',
+    rating: 4.8,
+    reviews: 128,
+    badge: 'best seller',
+  },
+  {
+    id: 1002,
+    name: 'Cabas cuir grainé ivoire',
+    price: 189,
+    image: 'https://images.unsplash.com/photo-1559563458-527698bf5295?auto=format&fit=crop&w=1200&q=80',
+    category: 'Cabas',
+    rating: 4.7,
+    reviews: 91,
+    badge: 'new',
+  },
+  {
+    id: 1003,
+    name: 'Sac bandoulière rouge',
+    price: 159,
+    image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1200&q=80',
+    category: 'Sacs bandoulière',
+    rating: 4.6,
+    reviews: 73,
+    badge: 'trending',
+  },
+  {
+    id: 1004,
+    name: 'Escarpins slingback noirs',
+    price: 149,
+    image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80',
+    category: 'Escarpins',
+    rating: 4.9,
+    reviews: 44,
+    badge: 'new',
+  },
+  {
+    id: 1005,
+    name: 'Sandales à talon nude',
+    price: 139,
+    image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=1200&q=80',
+    category: 'Sandales',
+    rating: 4.8,
+    reviews: 61,
+    badge: 'best seller',
+  },
+  {
+    id: 1006,
+    name: 'Bottines cuir chocolat',
+    price: 210,
+    image: 'https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=1200&q=80',
+    category: 'Bottines',
+    rating: 4.5,
+    reviews: 38,
+    badge: 'trending',
+  },
+  {
+    id: 1007,
+    name: 'Sneakers femme blanches',
+    price: 135,
+    image: 'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&w=1200&q=80',
+    category: 'Sneakers femme',
+    rating: 4.9,
+    reviews: 102,
+    badge: 'limited',
+  },
+  {
+    id: 1008,
+    name: 'Ballerines ivoire',
+    price: 119,
+    image: 'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=1200&q=80',
+    category: 'Ballerines',
+    rating: 4.8,
+    reviews: 87,
+    badge: 'new',
+  },
+];
+
+function mapBackendProduct(product: Product, index: number): ProductCardData {
+  const image = product.ProductImage?.[0]?.ImageUrl
+    ?? 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80';
+
+  const badgeCycle = ['best seller', 'new', 'trending', 'limited'] as const;
+
+  return {
+    id: product.ProductId,
+    name: product.ProductName,
+    price: Number(product.Price),
+    image,
+    category: product.Category?.CategoryName ?? 'Collection',
+    rating: 4.5 + ((index % 4) * 0.1),
+    reviews: 40 + index * 7,
+    badge: badgeCycle[index % badgeCycle.length],
+  };
+}
+
+function normalizeHomeCards(cards: ProductCardData[]): ProductCardData[] {
+  const normalized = [...cards];
+
+  if (normalized.length >= 12) {
+    return normalized.slice(0, 12);
+  }
+
+  let fallbackIndex = 0;
+  while (normalized.length < 12) {
+    const fallback = FALLBACK_HOME_CARDS[fallbackIndex % FALLBACK_HOME_CARDS.length];
+    normalized.push({
+      ...fallback,
+      id: fallback.id + normalized.length,
+    });
+    fallbackIndex += 1;
+  }
+
+  return normalized.slice(0, 12);
+}
+
+export default async function Home() {
+  const response = await getProducts({ limit: 16, sortBy: 'CreatedAt', sortOrder: 'desc' });
+  const backendCards = response.data.map(mapBackendProduct);
+  const homeCards = normalizeHomeCards(backendCards.length > 0 ? backendCards : FALLBACK_HOME_CARDS);
+
+  const firstSelection = homeCards.slice(0, 8);
+  const secondSelection = homeCards.slice(4, 12);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="bg-[var(--shell-bg)]">
+      <HeroSection />
+      <CategoryBar />
+      <ProductGrid title="Sélection sacs" products={firstSelection} />
+      <EditorialSection />
+      <ProductGrid title="Chaussures femme" products={secondSelection} />
     </div>
   );
 }

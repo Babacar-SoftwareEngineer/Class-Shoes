@@ -1,166 +1,45 @@
 import type { Request, Response } from 'express';
-import prisma from '../config/db.js';
+import { fetchProducts, fetchProductById } from '../services/productService.js';
+import { NotFoundError } from '../errors/AppError.js';
 
 /**
  * Récupère la liste des produits avec pagination et filtres dynamiques
  */
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
-  try {
-    // 1. Extraction et conversion des paramètres de requête
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 12;
-    const skip = (page - 1) * limit;
+  const { page, limit, search, categoryId, minPrice, maxPrice, sortBy, sortOrder } = req.query as any;
 
-    const search = req.query.search as string;
-    const categoryId = req.query.categoryId ? parseInt(req.query.categoryId as string) : undefined;
-    const minPrice = req.query.minPrice ? parseFloat(req.query.minPrice as string) : undefined;
-    const maxPrice = req.query.maxPrice ? parseFloat(req.query.maxPrice as string) : undefined;
-    const sortBy = (req.query.sortBy as string) || 'CreatedAt';
-    const sortOrder = (req.query.sortOrder as string) === 'desc' ? 'desc' : 'asc';
+  const result = await fetchProducts({
+    page,
+    limit,
+    search,
+    categoryId,
+    minPrice,
+    maxPrice,
+    sortBy,
+    sortOrder,
+  });
 
-    // Sécurisation du tri (champs autorisés)
-    const allowedSortFields = ['ProductName', 'Price', 'CreatedAt'];
-    const orderField = allowedSortFields.includes(sortBy) ? sortBy : 'CreatedAt';
-
-    // 2. Construction de la clause WHERE dynamique
-    const where: any = {
-      IsActive: true, // Par défaut, uniquement les produits actifs
-    };
-
-    if (search) {
-      where.ProductName = {
-        contains: search,
-        mode: 'insensitive', // Recherche insensible à la casse
-      };
-    }
-
-    if (categoryId && !isNaN(categoryId)) {
-      where.CategoryId = categoryId;
-    }
-
-    // Gestion de la fourchette de prix
-    if ((minPrice !== undefined && !isNaN(minPrice)) || (maxPrice !== undefined && !isNaN(maxPrice))) {
-      where.Price = {};
-      if (minPrice !== undefined && !isNaN(minPrice)) {
-        where.Price.gte = minPrice;
-      }
-      if (maxPrice !== undefined && !isNaN(maxPrice)) {
-        where.Price.lte = maxPrice;
-      }
-    }
-
-    // 3. Exécution parallèle des requêtes pour de meilleures performances
-    const [products, total] = await Promise.all([
-      prisma.product.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: {
-          [orderField]: sortOrder,
-        },
-        include: {
-          Category: {
-            select: {
-              CategoryId: true,
-              CategoryName: true,
-            },
-          },
-          ProductImage: {
-            select: {
-              ImageId: true,
-              ImageUrl: true,
-            },
-          },
-        },
-      }),
-      prisma.product.count({ where }),
-    ]);
-
-    // 4. Calcul des métadonnées de pagination
-    const totalPages = Math.ceil(total / limit);
-
-    res.status(200).json({
-      success: true,
-      data: products,
-      pagination: {
-        totalItems: total,
-        totalPages,
-        currentPage: page,
-        limit,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1,
-      },
-    });
-  } catch (error: any) {
-    console.error('Erreur lors de la récupération des produits:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Une erreur interne est survenue lors de la récupération des produits.',
-    });
-  }
+  res.status(200).json({
+    success: true,
+    data: result.products,
+    pagination: result.pagination,
+  });
 };
 
 /**
  * Récupère les détails d'un produit spécifique par son identifiant
  */
 export const getProductById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const id = parseInt(req.params.id as string);
-    
-    if (isNaN(id)) {
-      res.status(400).json({
-        success: false,
-        message: "L'identifiant du produit fourni est invalide."
-      });
-      return;
-    }
+  const id = Number(req.params.id);
 
-    const product = await prisma.product.findUnique({
-      where: {
-        ProductId: id,
-      },
-      include: {
-        Category: {
-          select: {
-            CategoryId: true,
-            CategoryName: true,
-          },
-        },
-        ProductImage: {
-          select: {
-            ImageId: true,
-            ImageUrl: true,
-          },
-        },
-        ProductReview: {
-          include: {
-            UserProfile: {
-              select: {
-                DisplayName: true,
-              },
-            },
-          },
-        },
-      },
-    });
+  const product = await fetchProductById(id);
 
-    if (!product) {
-      res.status(404).json({
-        success: false,
-        message: "Le produit demandé n'existe pas."
-      });
-      return;
-    }
-
-    res.status(200).json({
-      success: true,
-      data: product,
-    });
-  } catch (error: any) {
-    console.error('Erreur lors de la récupération du produit:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Une erreur interne est survenue lors de la récupération des détails du produit.',
-    });
+  if (!product) {
+    throw new NotFoundError("Le produit demandé n'existe pas.");
   }
+
+  res.status(200).json({
+    success: true,
+    data: product,
+  });
 };
