@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import AddToCartButton from '../../components/AddToCartButton';
 import { getProducts, ProductFilters, Product } from '../../services/productService';
+import { CATALOG_CATEGORIES, formatPrice } from '../../lib/catalog';
 
 interface PageProps {
   searchParams: Promise<{
@@ -14,19 +15,6 @@ interface PageProps {
     sortOrder?: string;
   }>;
 }
-
-const CATEGORIES = [
-  { id: 1, name: 'Sacs à main', icon: '👜' },
-  { id: 2, name: 'Cabas', icon: '🛍️' },
-  { id: 3, name: 'Sacs bandoulière', icon: '🎒' },
-  { id: 4, name: 'Escarpins', icon: '👠' },
-  { id: 5, name: 'Sandales', icon: '👡' },
-  { id: 6, name: 'Bottines', icon: '🥾' },
-  { id: 7, name: 'Ballerines', icon: '🥿' },
-  { id: 8, name: 'Sneakers femme', icon: '👟' },
-  { id: 9, name: 'Mules', icon: '✨' },
-  { id: 10, name: 'Mocassins', icon: '🥿' },
-];
 
 function buildLink(params: Record<string, string | undefined>) {
   const nextParams = new URLSearchParams();
@@ -75,29 +63,34 @@ export default async function ProductsPage({ searchParams }: PageProps) {
   };
 
   const defaultImage = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80';
+  const isShoesPage = currentCategory === 4;
 
   return (
-    <div className="min-h-screen bg-[var(--shell-bg)] px-4 py-6 sm:px-6 lg:px-8">
-      <section className="overflow-hidden border border-[var(--line)] bg-white">
-        <div className="bg-[var(--page-bg)] px-6 py-16 text-center text-white">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-white/60">Collection 2026</p>
-          <h1 className="mt-4 font-serif text-4xl uppercase tracking-[0.12em] sm:text-5xl">
-            Sacs & chaussures femme
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/75">
-            Une sélection premium de sacs, escarpins, bottines et essentiels femme pensée pour une boutique plus élégante.
-          </p>
+    <div className="min-h-screen bg-(--shell-bg)">
+      <section className="bg-(--page-bg) px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-(--muted)">Accueil / {isShoesPage ? 'Chaussures' : 'Collection 2026'}</p>
+            <h1 className="mt-6 max-w-lg font-serif text-5xl leading-[0.98] text-(--ink) sm:text-6xl">{isShoesPage ? 'Chaussures' : 'La collection, pensée avec soin.'}</h1>
+            <p className="mt-6 max-w-md text-sm leading-7 text-(--muted)">
+              {isShoesPage ? 'Talons, chaussures plates et bottines en cuir italien. Chaque paire est finie à la main et pensée pour vous accompagner du matin au soir.' : 'Cuirs structurés, silhouettes sculptées et signatures discrètes pour le vestiaire quotidien.'}
+            </p>
+          </div>
+          <div className="relative aspect-16/7 w-full overflow-hidden rounded-xl bg-(--card) lg:max-w-155 lg:justify-self-end">
+            <Image src={isShoesPage ? '/cat-shoes.jpg' : '/cat-bags.jpg'} alt={isShoesPage ? 'Chaussures Class Shoes' : 'Collection de sacs Class Shoes'} fill sizes="(max-width: 1024px) 100vw, 620px" quality={82} className="object-cover object-center" priority />
+          </div>
         </div>
+      </section>
 
-        <div className="grid gap-8 px-4 py-8 lg:grid-cols-[280px_1fr] lg:px-6">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[220px_1fr] lg:px-8">
           <aside className="space-y-6">
-            <div className="border border-[var(--line)] p-4">
-              <div className="flex items-center justify-between border-b border-[var(--line)] pb-3">
-                <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--ink)]">
+            <div className="border-t border-(--ink) pt-4">
+              <div className="flex items-center justify-between border-b border-(--line) pb-3">
+                <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-(--ink)">
                   Filtres
                 </h2>
                 {(currentSearch || currentCategory || currentMinPrice || currentMaxPrice || currentSortBy !== 'CreatedAt') ? (
-                  <Link href="/products" className="text-[10px] uppercase tracking-[0.22em] text-[var(--muted)]">
+                  <Link href="/products" className="text-[10px] uppercase tracking-[0.22em] text-(--muted)">
                     Réinitialiser
                   </Link>
                 ) : null}
@@ -110,8 +103,8 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                 {currentSortBy !== 'CreatedAt' ? <input type="hidden" name="sortBy" value={currentSortBy} /> : null}
                 {currentSortOrder !== 'desc' ? <input type="hidden" name="sortOrder" value={currentSortOrder} /> : null}
 
-                <div>
-                  <label className="mb-2 block text-[10px] uppercase tracking-[0.22em] text-[var(--muted)]">
+                {!isShoesPage ? <div>
+                  <label className="mb-2 block text-[10px] uppercase tracking-[0.22em] text-(--muted)">
                     Recherche
                   </label>
                   <input
@@ -119,12 +112,27 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                     name="search"
                     defaultValue={currentSearch}
                     placeholder="Sac à main, escarpins..."
-                    className="w-full border border-[var(--line)] bg-[var(--paper)] px-3 py-2 text-sm focus-ring"
+                    className="w-full border border-(--line) bg-(--paper) px-3 py-2 text-sm focus-ring"
                   />
-                </div>
+                </div> : (
+                  <>
+                    <div>
+                      <label className="mb-3 block text-[10px] uppercase tracking-[0.22em] text-(--muted)">Style</label>
+                      <div className="space-y-2 text-xs text-(--ink)">
+                        {['Talons', 'Plates', 'Bottines', 'Sandales'].map((style) => <label key={style} className="flex items-center gap-2"><input type="radio" name="style" className="accent-(--ink)" />{style}</label>)}
+                      </div>
+                    </div>
+                    <div className="border-t border-(--line) pt-5">
+                      <label className="mb-3 block text-[10px] uppercase tracking-[0.22em] text-(--muted)">Couleur</label>
+                      <div className="space-y-2 text-xs text-(--ink)">
+                        {['Sable', 'Noir'].map((colour) => <label key={colour} className="flex items-center gap-2"><input type="radio" name="colour" className="accent-(--ink)" />{colour}</label>)}
+                      </div>
+                    </div>
+                  </>
+                )}
 
-                <div>
-                  <label className="mb-2 block text-[10px] uppercase tracking-[0.22em] text-[var(--muted)]">
+                {!isShoesPage ? <div>
+                  <label className="mb-2 block text-[10px] uppercase tracking-[0.22em] text-(--muted)">
                     Catégories
                   </label>
                   <div className="space-y-1.5">
@@ -136,13 +144,13 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                         sortOrder: currentSortOrder,
                       })}
                       className={`flex items-center justify-between border px-3 py-2 text-sm transition-colors ${
-                        !currentCategory ? 'border-[var(--ink)] bg-[var(--ink)] text-white' : 'border-[var(--line)] hover:bg-[var(--paper)]'
+                        !currentCategory ? 'border-(--ink) bg-(--ink) text-white' : 'border-(--line) hover:bg-(--paper)'
                       }`}
                     >
                       <span>Tous les produits</span>
                       <span>✦</span>
                     </Link>
-                    {CATEGORIES.map((cat) => (
+                    {CATALOG_CATEGORIES.map((cat) => (
                       <Link
                         key={cat.id}
                         href={buildLink({
@@ -155,20 +163,17 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                           page: '1',
                         })}
                         className={`flex items-center justify-between border px-3 py-2 text-sm transition-colors ${
-                          currentCategory === cat.id ? 'border-[var(--ink)] bg-[var(--ink)] text-white' : 'border-[var(--line)] hover:bg-[var(--paper)]'
+                          currentCategory === cat.id ? 'border-(--ink) bg-(--ink) text-white' : 'border-(--line) hover:bg-(--paper)'
                         }`}
                       >
-                        <span className="flex items-center gap-2">
-                          <span>{cat.icon}</span>
-                          <span>{cat.name}</span>
-                        </span>
+                        <span>{cat.name}</span>
                       </Link>
                     ))}
                   </div>
-                </div>
+                </div> : null}
 
                 <div>
-                  <label className="mb-2 block text-[10px] uppercase tracking-[0.22em] text-[var(--muted)]">
+                  <label className="mb-2 block text-[10px] uppercase tracking-[0.22em] text-(--muted)">
                     Prix
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -178,7 +183,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                       defaultValue={currentMinPrice ?? ''}
                       placeholder="Min"
                       min="0"
-                      className="w-full border border-[var(--line)] bg-[var(--paper)] px-3 py-2 text-sm focus-ring"
+                      className="w-full border border-(--line) bg-(--paper) px-3 py-2 text-sm focus-ring"
                     />
                     <input
                       type="number"
@@ -186,12 +191,12 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                       defaultValue={currentMaxPrice ?? ''}
                       placeholder="Max"
                       min="0"
-                      className="w-full border border-[var(--line)] bg-[var(--paper)] px-3 py-2 text-sm focus-ring"
+                      className="w-full border border-(--line) bg-(--paper) px-3 py-2 text-sm focus-ring"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="mt-3 w-full bg-[var(--page-bg)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-white transition-colors hover:bg-[#3a0b13]"
+                    className="mt-3 w-full bg-(--ink) px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-white transition-colors hover:bg-(--muted)"
                   >
                     Appliquer
                   </button>
@@ -200,13 +205,13 @@ export default async function ProductsPage({ searchParams }: PageProps) {
             </div>
           </aside>
 
-          <main className="space-y-6">
-            <div className="flex flex-col gap-4 border border-[var(--line)] bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-[var(--muted)]">
-                Nous avons trouvé <span className="font-semibold text-[var(--ink)]">{pagination.totalItems}</span> produits
+            <main className="space-y-6">
+            <div className="flex flex-col gap-4 border-y border-(--line) py-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-(--muted)">
+                <span className="font-semibold text-(--ink)">{pagination.totalItems}</span> produits trouvés
               </p>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--muted)]">Tri</span>
+                <span className="text-[10px] uppercase tracking-[0.22em] text-(--muted)">Trier</span>
                 <Link
                   href={buildLink({
                     search: currentSearch,
@@ -218,10 +223,10 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                     page: '1',
                   })}
                   className={`border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] ${
-                    currentSortBy === 'CreatedAt' ? 'border-[var(--ink)] bg-[var(--ink)] text-white' : 'border-[var(--line)]'
+                    currentSortBy === 'CreatedAt' ? 'border-(--ink) bg-(--ink) text-white' : 'border-(--line)'
                   }`}
                 >
-                  Plus récents
+                  Nouveautés
                 </Link>
                 <Link
                   href={buildLink({
@@ -234,7 +239,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                     page: '1',
                   })}
                   className={`border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] ${
-                    currentSortBy === 'Price' ? 'border-[var(--ink)] bg-[var(--ink)] text-white' : 'border-[var(--line)]'
+                    currentSortBy === 'Price' ? 'border-(--ink) bg-(--ink) text-white' : 'border-(--line)'
                   }`}
                 >
                   Prix
@@ -243,61 +248,63 @@ export default async function ProductsPage({ searchParams }: PageProps) {
             </div>
 
             {products.length === 0 ? (
-              <div className="border border-[var(--line)] bg-white p-10 text-center">
-                <h3 className="text-xl font-semibold text-[var(--ink)]">Aucun produit ne correspond</h3>
-                <p className="mx-auto mt-3 max-w-md text-sm text-[var(--muted)]">
+              <div className="border border-(--line) bg-white p-10 text-center">
+                <h3 className="text-xl font-semibold text-(--ink)">Aucun produit ne correspond</h3>
+                <p className="mx-auto mt-3 max-w-md text-sm text-(--muted)">
                   Essayez de réinitialiser vos filtres ou d&apos;affiner votre recherche pour découvrir plus d&apos;articles.
                 </p>
                 <Link
                   href="/products"
-                  className="mt-5 inline-flex bg-[var(--page-bg)] px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-white"
+                  className="mt-5 inline-flex bg-(--page-bg) px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-white"
                 >
                   Voir tout le catalogue
                 </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className={`grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 ${isShoesPage ? 'lg:grid-cols-2 lg:gap-x-8' : 'lg:grid-cols-3'}`}>
                 {products.map((product: Product) => {
                   const imageUrl = product.ProductImage?.[0]?.ImageUrl || defaultImage;
 
                   return (
-                    <article key={product.ProductId} className="group border border-[var(--line)] bg-white">
-                      <div className="relative aspect-square bg-[#f5f2ec]">
-                        <Image
-                          src={imageUrl}
-                          alt={product.ProductName}
-                          fill
-                          sizes="(max-width: 1024px) 50vw, 33vw"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
+                    <article key={product.ProductId} className="group">
+                      <div className="relative aspect-square overflow-hidden rounded-xl bg-(--card)">
+                        <Link href={`/product/${product.ProductId}`} className="absolute inset-0">
+                          <Image
+                            src={imageUrl}
+                            alt={product.ProductName}
+                            fill
+                            sizes="(max-width: 1024px) 50vw, 33vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </Link>
 
                         {product.Quantity === 0 ? (
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-                            <span className="bg-red-600 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white">
+                          <div className="absolute inset-0 flex items-center justify-center bg-(--ink)/55">
+                            <span className="bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-(--ink)">
                               Épuisé
                             </span>
                           </div>
                         ) : product.Quantity <= 5 ? (
-                          <span className="absolute left-3 top-3 bg-[#d8b04b] px-2 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white">
+                          <span className="absolute left-3 top-3 bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-(--ink)">
                             Stock limité
                           </span>
                         ) : null}
                       </div>
 
-                      <div className="flex flex-col gap-4 p-5">
+                      <div className="flex flex-col gap-3 pt-4">
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-(--muted)">
                             {product.Category?.CategoryName || 'Collection'}
                           </p>
-                          <h3 className="mt-1 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--ink)]">
+                          <h3 className="mt-1 text-sm font-normal text-(--ink)">
                             {product.ProductName}
                           </h3>
                         </div>
 
                         <div className="flex items-end justify-between gap-4">
                           <div>
-                            <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--muted)]">Prix</p>
-                            <p className="text-xl font-bold text-[var(--ink)]">${Number(product.Price).toFixed(2)}</p>
+                            <p className="text-[10px] uppercase tracking-[0.22em] text-(--muted)">Prix</p>
+                            <p className="text-xl font-semibold text-(--ink)">{formatPrice(product.Price)}</p>
                           </div>
                           <AddToCartButton product={product} />
                         </div>
@@ -321,12 +328,12 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                       sortOrder: currentSortOrder,
                       page: String(currentPage - 1),
                     })}
-                    className="border border-[var(--line)] px-3 py-2 text-sm"
+                    className="border border-(--line) px-3 py-2 text-sm"
                   >
                     Précédent
                   </Link>
                 ) : (
-                  <span className="border border-[var(--line)] px-3 py-2 text-sm text-[var(--muted)]">
+                  <span className="border border-(--line) px-3 py-2 text-sm text-(--muted)">
                     Précédent
                   </span>
                 )}
@@ -349,7 +356,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                           page: String(page),
                         })}
                         className={`flex h-10 w-10 items-center justify-center border text-sm font-semibold ${
-                          isCurrent ? 'border-[var(--ink)] bg-[var(--ink)] text-white' : 'border-[var(--line)]'
+                          isCurrent ? 'border-(--ink) bg-(--ink) text-white' : 'border-(--line)'
                         }`}
                       >
                         {page}
@@ -359,7 +366,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
 
                   if (page === currentPage - 3 || page === currentPage + 3) {
                     return (
-                      <span key={page} className="w-8 text-center text-[var(--muted)]">
+                      <span key={page} className="w-8 text-center text-(--muted)">
                         ...
                       </span>
                     );
@@ -379,12 +386,12 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                       sortOrder: currentSortOrder,
                       page: String(currentPage + 1),
                     })}
-                    className="border border-[var(--line)] px-3 py-2 text-sm"
+                    className="border border-(--line) px-3 py-2 text-sm"
                   >
                     Suivant
                   </Link>
                 ) : (
-                  <span className="border border-[var(--line)] px-3 py-2 text-sm text-[var(--muted)]">
+                  <span className="border border-(--line) px-3 py-2 text-sm text-(--muted)">
                     Suivant
                   </span>
                 )}
@@ -392,7 +399,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
             ) : null}
           </main>
         </div>
-      </section>
+
     </div>
   );
 }

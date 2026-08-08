@@ -1,8 +1,14 @@
 import { useSyncExternalStore } from 'react';
-import { useCartStore } from '../store/useCartStore';
+import { useCartStore, selectTotalItems, selectTotalPrice } from '../store/useCartStore';
 
 export function useCart() {
-  const store = useCartStore();
+  const items = useCartStore((state) => state.items);
+  const addItem = useCartStore((state) => state.addItem);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const totalItems = useCartStore(selectTotalItems);
+  const totalPrice = useCartStore(selectTotalPrice);
   const isMounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -10,10 +16,13 @@ export function useCart() {
   );
 
   return {
-    ...store,
-    items: isMounted ? store.items : [],
-    getTotalItems: isMounted ? store.getTotalItems : () => 0,
-    getTotalPrice: isMounted ? store.getTotalPrice : () => 0,
+    items: isMounted ? items : [],
+    addItem,
+    removeItem,
+    updateQuantity,
+    clearCart,
+    totalItems: isMounted ? totalItems : 0,
+    totalPrice: isMounted ? totalPrice : 0,
     isMounted,
   };
 }

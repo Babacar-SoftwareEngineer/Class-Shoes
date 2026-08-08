@@ -17,11 +17,19 @@ services:
   redis:
     image: redis:8-alpine
     container_name: class-shoes-redis-db
-
     ports:
       - "6379:6379"
-
     restart: unless-stopped
+
+  k6:
+    image: grafana/k6:latest
+    container_name: class-shoes-k6
+    environment:
+      BASE_URL: http://host.docker.internal:5000
+    volumes:
+      - ./load-tests:/scripts
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["k6 run /scripts/catalog-load-test.js"]
 
 volumes:
   pgdata:

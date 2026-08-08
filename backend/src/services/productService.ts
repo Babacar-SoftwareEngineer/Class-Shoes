@@ -1,5 +1,6 @@
 import prisma from '../config/db.js';
 import { getCachedValue, setCachedValue } from '../config/redis.js';
+import { Prisma } from '../generated/prisma/client.js';
 import type { FetchProductsParams, PaginatedProductsResult } from '../types/index.js';
 
 const PRODUCT_DETAILS_TTL_SECONDS = 3600;
@@ -43,11 +44,13 @@ export const fetchProducts = async (params: FetchProductsParams): Promise<Pagina
   }
 
   // Sécurisation du tri (champs autorisés)
-  const allowedSortFields = ['ProductName', 'Price', 'CreatedAt'];
-  const orderField = allowedSortFields.includes(sortBy) ? sortBy : 'CreatedAt';
+  const allowedSortFields = ['ProductName', 'Price', 'CreatedAt'] as const;
+  const orderField = allowedSortFields.includes(sortBy as (typeof allowedSortFields)[number])
+    ? (sortBy as (typeof allowedSortFields)[number])
+    : 'CreatedAt';
 
   // Construction de la clause WHERE dynamique
-  const where: any = {
+  const where: Prisma.ProductWhereInput = {
     IsActive: true,
   };
 
@@ -78,9 +81,7 @@ export const fetchProducts = async (params: FetchProductsParams): Promise<Pagina
       where,
       skip,
       take: limit,
-      orderBy: {
-        [orderField]: sortOrder,
-      },
+      orderBy: { [orderField]: sortOrder } as Prisma.ProductOrderByWithRelationInput,
       include: {
         Category: {
           select: {

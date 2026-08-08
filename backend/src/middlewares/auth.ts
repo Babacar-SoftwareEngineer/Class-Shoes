@@ -28,7 +28,7 @@ export function authenticateToken(
     const decoded = verifyToken(token);
     req.user = decoded;
     next();
-  } catch (error) {
+  } catch {
     throw new ForbiddenError("Jeton d'accès invalide ou expiré.");
   }
 }

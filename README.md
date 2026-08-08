@@ -1,146 +1,204 @@
-# Class Shoes - E-commerce
+# Class Shoes
 
-Ce projet contient la configuration pour le backend (Node.js/TypeScript) et le frontend de l'application Class Shoes.
+Class Shoes est une boutique en ligne de chaussures, sacs, parfums et accessoires.
+Le projet est composé d'un frontend Next.js, d'une API Express/TypeScript, d'une base PostgreSQL et d'un cache Redis.
 
 ## Prérequis
 
-Avant de commencer, assurez-vous d'avoir installé :
-* **Docker Desktop** (ou Docker Engine & Docker Compose)
-* **Node.js** (version 18+ recommandée)
-* **pgAdmin** (déjà présent sur votre machine)
+- Node.js 18 ou supérieur
+- Docker Desktop avec Docker Compose
+- Git
 
----
+## Architecture
 
-## 🛠️ Base de Données (PostgreSQL avec Docker)
-
-La base de données tourne dans un conteneur isolé grâce à Docker Compose. Cela évite d'avoir à installer PostgreSQL directement sur votre système d'exploitation.
-
-### 1. Démarrer la base de données
-Exécutez la commande suivante à la racine du projet pour démarrer le conteneur en arrière-plan :
-```bash
-docker compose up -d
+```text
+frontend/   Next.js, React, Tailwind CSS, Zustand
+backend/    Express, TypeScript, Prisma, JWT
+PostgreSQL  Base de données produit, utilisateurs et commandes
+Redis       Cache des produits
+load-tests/ Scénarios de charge k6
 ```
 
-### 2. Vérifier l'état du conteneur
-Vous pouvez lister les conteneurs actifs pour vérifier que le conteneur `class-shoes-db` fonctionne correctement :
-```bash
-docker ps
+## Démarrage local
+
+### 1. Installer les dépendances
+
+```powershell
+cd backend
+npm install
+
+cd ../frontend
+npm install
 ```
 
-### 3. Arrêter la base de données
-Pour arrêter le conteneur sans perdre vos données :
-```bash
+### 2. Configurer le backend
+
+Créer `backend/.env` à partir de `backend/.env.example` :
+
+```env
+PORT=5000
+DATABASE_URL="postgresql://postgres:postgres@localhost:5431/class_shoes_db?schema=public"
+JWT_SECRET=remplacer-par-une-cle-secrete-longue
+JWT_EXPIRES_IN=1h
+REDIS_URL="redis://localhost:6379"
+```
+
+Ne jamais committer `backend/.env` ou une clé secrète réelle.
+
+### 3. Démarrer PostgreSQL et Redis
+
+Depuis la racine :
+
+```powershell
+docker compose up -d db redis
+docker compose ps
+```
+
+PostgreSQL est accessible sur `localhost:5431` depuis la machine hôte.
+Redis est accessible sur `localhost:6379`.
+
+### 4. Préparer la base de données
+
+```powershell
+cd backend
+npx prisma generate
+npx prisma migrate deploy
+npm run seed
+```
+
+Le seed réinitialise les données de développement. Ne pas l'exécuter sur une base de production sans vérification.
+
+### 5. Démarrer l'API
+
+```powershell
+cd backend
+npm run dev
+```
+
+API locale : `http://localhost:5000`
+
+Routes principales :
+
+```text
+GET  /                         Santé de l'API
+GET  /api/products             Catalogue avec filtres et pagination
+GET  /api/products/:id         Détail produit
+POST /api/auth/register        Inscription
+POST /api/auth/login           Connexion
+GET  /api/auth/me              Profil authentifié
+```
+
+### 6. Configurer et démarrer le frontend
+
+Créer `frontend/.env.local` :
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
+
+Puis lancer Next.js :
+
+```powershell
+cd frontend
+npm run dev
+```
+
+Application locale : `http://localhost:3000`
+
+Si l'API est indisponible, le frontend utilise actuellement des données mock pour permettre le développement de l'interface. Ce fallback doit être surveillé ou désactivé en production.
+
+## Fonctionnalités frontend
+
+- Homepage éditoriale Class Shoes
+- Catalogue filtrable et paginé
+- Page dédiée Chaussures
+- Page détail produit
+- Galerie et recommandations produit
+- Panier persistant avec tiroir latéral
+- Modification des quantités selon le stock
+- Page commande avec informations personnelles, livraison et paiement
+- Affichage des montants en FCFA
+- Authentification API prête à être connectée aux écrans frontend
+
+## Scripts
+
+### Frontend
+
+```powershell
+cd frontend
+npm run dev
+npm run lint
+npm run build
+npm start
+```
+
+### Backend
+
+```powershell
+cd backend
+npm run dev
+npm run lint
+npm run build
+npm start
+npm run seed
+```
+
+### Test de charge
+
+Le script k6 teste le catalogue :
+
+```powershell
+docker compose run --rm k6
+```
+
+Ou avec k6 installé localement :
+
+```powershell
+$env:BASE_URL = "http://localhost:5000"
+k6 run load-tests/catalog-load-test.js
+```
+
+## Vérification avant commit
+
+```powershell
+cd backend
+npm run lint
+npm run build
+
+cd ../frontend
+npm run lint
+npm run build
+```
+
+## Déploiement
+
+Avant une mise en ligne complète, il reste notamment à :
+
+- ajouter l'API de création et consultation des commandes ;
+- connecter la page commande à cette API ;
+- intégrer un fournisseur de paiement et ses webhooks ;
+- connecter les écrans frontend à l'authentification JWT ;
+- utiliser une base PostgreSQL managée et un Redis managé ;
+- remplacer `cors()` ouvert par une liste de domaines autorisés ;
+- définir des secrets de production différents du développement ;
+- configurer `NEXT_PUBLIC_API_URL` avec l'URL publique de l'API ;
+- désactiver ou surveiller le fallback mock en production ;
+- configurer les sauvegardes, logs, HTTPS et alertes.
+
+Le backend et le frontend peuvent être déployés séparément. Le frontend doit connaître l'URL publique du backend via `NEXT_PUBLIC_API_URL`, et le backend doit autoriser le domaine public du frontend dans CORS.
+
+## Arrêter les services locaux
+
+```powershell
 docker compose stop
 ```
 
-Pour supprimer le conteneur (les données restent conservées dans le volume Docker `pgdata`) :
-```bash
+Pour supprimer les conteneurs sans supprimer le volume PostgreSQL :
+
+```powershell
 docker compose down
 ```
 
----
+## État actuel
 
-## 🔌 Connexion avec pgAdmin
-
-Pour visualiser et gérer les données de votre base de données avec **pgAdmin** :
-
-1. Ouvrez **pgAdmin** sur votre machine.
-2. Créez un nouveau serveur (*Register -> Server...*).
-3. Dans l'onglet **General**, nommez le serveur (ex: `Class Shoes Local`).
-4. Dans l'onglet **Connection**, saisissez les informations suivantes :
-   * **Host name/address** : `localhost`
-   * **Port** : `5432`
-   * **Maintenance database** : `class_shoes_db`
-   * **Username** : `postgres`
-   * **Password** : `postgres` (cochez la case *Save password* pour ne pas avoir à le retaper)
-5. Enregistrez. Vous êtes connecté !
-
----
-
-## 🚀 Prochaines Étapes : Intégration de Prisma ORM
-
-Pour utiliser Prisma pour la communication entre le backend et la base de données :
-
-1. Positionnez-vous dans le dossier backend :
-   ```bash
-   cd backend
-   ```
-2. Installez Prisma comme dépendance de développement :
-   ```bash
-   npm install prisma --save-dev
-   ```
-3. Initialisez Prisma :
-   ```bash
-   npx prisma init
-   ```
-   *Cette commande créera un dossier `backend/prisma` contenant un fichier `schema.prisma`.*
-4. Configurez vos modèles dans `schema.prisma` et lancez les migrations avec :
-   ```bash
-   npx prisma migrate dev --name init
-   ```
-
----
-
-## 🔐 Système d'Authentification (Bcrypt & JWT)
-
-L'authentification du projet a été implémentée avec succès en utilisant **bcryptjs** pour le hachage des mots de passe et **JSON Web Tokens (JWT)** pour la gestion des sessions.
-
-### Configuration requise (.env)
-Avant de lancer le serveur, assurez-vous que les variables suivantes sont configurées dans votre fichier `backend/.env` :
-```env
-JWT_SECRET=votre_cle_secrete_super_securisee
-JWT_EXPIRES_IN=1h
-```
-
-### Endpoints de l'API
-
-#### 1. Inscription d'un utilisateur
-* **URL :** `POST /api/auth/register`
-* **Corps (JSON) :**
-  ```json
-  {
-    "email": "utilisateur@exemple.com",
-    "password": "MotDePasseSecurise123",
-    "displayName": "Nom d'affichage",
-    "firstName": "Prénom",
-    "lastName": "Nom"
-  }
-  ```
-* **Réponse (201 Created) :** Retourne le profil utilisateur créé (sans le hash du mot de passe).
-
-#### 2. Connexion
-* **URL :** `POST /api/auth/login`
-* **Corps (JSON) :**
-  ```json
-  {
-    "email": "utilisateur@exemple.com",
-    "password": "MotDePasseSecurise123"
-  }
-  ```
-* **Réponse (200 OK) :** Retourne le token JWT d'accès et les informations de l'utilisateur.
-
-#### 3. Profil connecté (Route Protégée)
-* **URL :** `GET /api/auth/me`
-* **En-têtes (Headers) :**
-  * `Authorization: Bearer <votre_token_jwt>`
-* **Réponse (200 OK) :** Retourne les informations de l'utilisateur associé au token.
-
----
-
-## 🛒 Gestion du Panier (Zustand & State Management)
-
-L'état global du panier côté client a été implémenté à l'aide de **Zustand** avec persistance locale (`localStorage`) et résolution des problèmes d'hydratation (Next.js SSR).
-
-### Architecture des fichiers créés :
-1. **Types du Panier** : [cart.ts](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/types/cart.ts) - Définition de l'interface `CartItem`.
-2. **Store Global** : [useCartStore.ts](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/store/useCartStore.ts) - Actions d'ajout d'articles (avec validation de stock), de mise à jour des quantités, de suppression, de nettoyage et sélecteurs de totaux.
-3. **Hook Hydration-Safe** : [useCart.ts](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/hooks/useCart.ts) - Hook personnalisé empêchant les erreurs de mismatch d'hydratation serveur/client.
-
-### Éléments d'interface utilisateur intégrés :
-* **Bouton d'Ajout** : [AddToCartButton.tsx](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/components/AddToCartButton.tsx) - Composant client fonctionnel sur la grille des produits.
-* **Header / Barre de Navigation** : [Header.tsx](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/components/Header.tsx) - Intègre un badge réactif avec animation affichant le nombre d'articles dans le panier.
-* **Page Panier** : `/cart` ([page.tsx](file:///c:/Users/bmd%20tech/Documents/class%20shoes/frontend/src/app/cart/page.tsx)) - Permet de revoir le panier, modifier les quantités, supprimer des articles individuels ou vider entièrement le panier.
-
-*Note : En cas d'indisponibilité du serveur backend, le service de produits (`productService.ts`) bascule automatiquement sur des données mockées dynamiques pour permettre de tester l'intégralité du tunnel de panier localement.*
-
-
+Le catalogue et l'interface e-commerce sont opérationnels localement. La persistance réelle des commandes et le paiement doivent encore être implémentés côté backend avant une ouverture commerciale.

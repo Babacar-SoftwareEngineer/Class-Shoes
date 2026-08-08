@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 const ECO_PRODUCTS = [
   { id: 1, image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=300&q=80', name: 'Eco Runner' },
@@ -12,7 +13,7 @@ export default function EcoBanner() {
   return (
     <section className="w-full bg-white dark:bg-zinc-950 py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 p-8 md:p-12 animate-fade-in-up">
+        <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-emerald-600 via-emerald-500 to-teal-500 p-8 md:p-12 animate-fade-in-up">
           {/* Background decorations */}
           <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/5" />
           <div className="absolute -bottom-12 -left-12 w-40 h-40 rounded-full bg-white/5" />
@@ -26,20 +27,20 @@ export default function EcoBanner() {
             {/* Text content */}
             <div className="flex-1 space-y-3 text-center lg:text-left">
               <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-100 bg-white/15 backdrop-blur-sm px-3 py-1 rounded-full">
-                🌿 Eco-Friendly
+                🌿 Collection responsable
               </span>
               <h2 className="text-2xl md:text-3xl font-extrabold text-white leading-tight">
-                Shop Eco-Friendly,{' '}
-                <span className="text-emerald-100">Live Sustainably!</span>
+                Une mode plus responsable,{' '}
+                <span className="text-emerald-100">pensée pour durer.</span>
               </h2>
               <p className="text-sm text-emerald-100/80 max-w-md font-medium">
-                Discover our collection of sustainably-made shoes crafted from recycled and organic materials.
+                Découvrez nos chaussures fabriquées avec des matières recyclées et organiques.
               </p>
               <Link
                 href="/products"
                 className="inline-flex items-center gap-2 mt-2 px-6 py-3 bg-white text-emerald-700 text-sm font-bold rounded-full hover:bg-emerald-50 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.97] group"
               >
-                Shop Sustainable
+                Découvrir la collection responsable
                 <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
@@ -54,10 +55,12 @@ export default function EcoBanner() {
                   className="shrink-0 w-24 h-24 md:w-28 md:h-28 rounded-xl overflow-hidden border-2 border-white/30 shadow-lg hover:scale-105 hover:border-white/60 transition-all duration-300 animate-fade-in-up"
                   style={{ animationDelay: `${i * 0.1}s` }}
                 >
-                  <img
+                  <Image
                     src={product.image}
                     alt={product.name}
                     loading="lazy"
+                    width={112}
+                    height={112}
                     className="w-full h-full object-cover"
                   />
                 </div>

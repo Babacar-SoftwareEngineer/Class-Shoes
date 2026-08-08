@@ -111,20 +111,21 @@ model PaymentInformation {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model Product {
-  ProductId     Int             @id @default(autoincrement())
-  ProductName   String          @db.VarChar(255)
-  Price         Decimal         @db.Decimal(10, 2)
-  Quantity      Int             @default(0)
-  CategoryId    Int?
-  IsActive      Boolean?        @default(true)
-  CreatedAt     DateTime?       @default(now()) @db.Timestamptz(6)
-  Cart          Cart[]
-  Coupon        Coupon[]
-  OrderItem     OrderItem[]
-  Category      Category?       @relation(fields: [CategoryId], references: [CategoryId], onUpdate: NoAction)
-  ProductImage  ProductImage[]
-  ProductReview ProductReview[]
-  Wishlist      Wishlist[]
+  ProductId      Int              @id @default(autoincrement())
+  ProductName    String           @db.VarChar(255)
+  Price          Decimal          @db.Decimal(10, 2)
+  Quantity       Int              @default(0)
+  CategoryId     Int?
+  IsActive       Boolean?         @default(true)
+  CreatedAt      DateTime?        @default(now()) @db.Timestamptz(6)
+  Cart           Cart[]
+  Coupon         Coupon[]
+  OrderItem      OrderItem[]
+  Category       Category?        @relation(fields: [CategoryId], references: [CategoryId], onUpdate: NoAction)
+  ProductImage   ProductImage[]
+  ProductReview  ProductReview[]
+  Wishlist       Wishlist[]
+  ProductVariant ProductVariant[]
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
@@ -201,4 +202,32 @@ model Wishlist {
   UserProfile UserProfile @relation(fields: [UserId], references: [UserId], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([UserId, ProductId], map: "UQ_Wishlist_User_Product")
+}
+
+model Color {
+  ColorId        Int              @id @default(autoincrement())
+  ColorName      String           @db.VarChar(50)
+  HexCode        String?          @db.VarChar(7)
+  ProductVariant ProductVariant[]
+}
+
+model Size {
+  SizeId         Int              @id @default(autoincrement())
+  SizeName       String           @db.VarChar(50)
+  ProductVariant ProductVariant[]
+}
+
+model ProductVariant {
+  VariantId Int      @id @default(autoincrement())
+  ProductId Int
+  ColorId   Int?
+  SizeId    Int?
+  Quantity  Int      @default(0)
+  Price     Decimal? @db.Decimal(10, 2)
+
+  Product Product @relation(fields: [ProductId], references: [ProductId], onDelete: Cascade)
+  Color   Color?  @relation(fields: [ColorId], references: [ColorId], onDelete: SetNull)
+  Size    Size?   @relation(fields: [SizeId], references: [SizeId], onDelete: SetNull)
+
+  @@unique([ProductId, ColorId, SizeId])
 }

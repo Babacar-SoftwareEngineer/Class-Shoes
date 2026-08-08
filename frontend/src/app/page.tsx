@@ -134,7 +134,7 @@ export default async function Home() {
   const secondSelection = homeCards.slice(4, 12);
 
   return (
-    <div className="bg-[var(--shell-bg)]">
+    <div className="bg-(--shell-bg)">
       <HeroSection />
       <CategoryBar />
       <ProductGrid title="Sélection sacs" products={firstSelection} />

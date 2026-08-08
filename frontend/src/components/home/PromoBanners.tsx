@@ -2,9 +2,9 @@ import Link from 'next/link';
 
 const BANNERS = [
   {
-    title: 'New Season Collection',
-    subtitle: 'Fresh styles for spring & summer',
-    cta: 'Explore',
+    title: 'Nouvelle collection',
+    subtitle: 'Des silhouettes fraîches pour la saison',
+    cta: 'Découvrir',
     href: '/products',
     bgClass: 'bg-gradient-to-br from-emerald-600 to-teal-700',
     icon: (
@@ -14,9 +14,9 @@ const BANNERS = [
     ),
   },
   {
-    title: 'Premium Leather',
-    subtitle: 'Handcrafted quality that lasts',
-    cta: 'Discover',
+    title: 'Cuir d’exception',
+    subtitle: 'Une qualité façonnée pour durer',
+    cta: 'Découvrir',
     href: '/products?categoryId=5',
     bgClass: 'bg-gradient-to-br from-zinc-800 to-zinc-950',
     icon: (
@@ -26,9 +26,9 @@ const BANNERS = [
     ),
   },
   {
-    title: 'Limited Edition',
-    subtitle: 'Exclusive drops — while stocks last',
-    cta: 'Shop Now',
+    title: 'Édition limitée',
+    subtitle: 'Pièces exclusives, jusqu’à épuisement',
+    cta: 'Acheter',
     href: '/products',
     bgClass: 'bg-gradient-to-br from-amber-500 to-orange-600',
     icon: (
@@ -58,12 +58,12 @@ export default function PromoBanners() {
 
               <div className="relative z-10 space-y-2">
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">
-                  Special Offer
+                  Offre spéciale
                 </span>
                 <h3 className="text-lg md:text-xl font-extrabold leading-tight">
                   {banner.title}
                 </h3>
-                <p className="text-xs text-white/70 font-medium max-w-[200px]">
+                <p className="text-xs text-white/70 font-medium max-w-50">
                   {banner.subtitle}
                 </p>
                 <div className="pt-2">

@@ -8,15 +8,18 @@ import type { ZodSchema } from 'zod';
 export const validate = (schema: ZodSchema) => {
   return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
     try {
-      const parsed: any = await schema.parseAsync({
+      const parsed = await schema.parseAsync({
         body: req.body,
         query: req.query,
         params: req.params,
       });
 
-      if (parsed.body) req.body = parsed.body;
-      if (parsed.query) req.query = parsed.query;
-      if (parsed.params) req.params = parsed.params;
+      if (typeof parsed === 'object' && parsed !== null) {
+        const values = parsed as { body?: unknown; query?: unknown; params?: unknown };
+        if (values.body) req.body = values.body;
+        if (values.query) req.query = values.query as Request['query'];
+        if (values.params) req.params = values.params as Request['params'];
+      }
 
       next();
     } catch (error) {

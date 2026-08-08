@@ -17,16 +17,17 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
 
   return (
     <button
+      type="button"
       onClick={handleAdd}
       disabled={product.Quantity === 0}
-      className={`p-2.5 rounded-xl border transition-all ${
+      className={`inline-flex h-11 items-center justify-center border px-5 text-[10px] font-medium uppercase tracking-[0.2em] transition-colors ${
         product.Quantity === 0
-          ? 'border-zinc-100 dark:border-zinc-800 text-zinc-300 dark:text-zinc-600 cursor-not-allowed'
-          : 'border-zinc-200 dark:border-zinc-800 hover:bg-violet-600 hover:text-white dark:hover:bg-violet-600 hover:border-violet-600 dark:hover:border-violet-600 cursor-pointer'
+          ? 'cursor-not-allowed border-(--line) text-(--muted)'
+          : 'cursor-pointer border-(--ink) bg-(--ink) text-white hover:bg-transparent hover:text-(--ink)'
       }`}
-      title={product.Quantity > 0 ? "Ajouter au panier" : "Rupture de stock"}
+      title={product.Quantity > 0 ? 'Ajouter au panier' : 'Rupture de stock'}
     >
-      🛒
+      {product.Quantity > 0 ? 'Ajouter au panier' : 'Rupture de stock'}
     </button>
   );
 }

@@ -1,6 +1,14 @@
-import { Product } from '../services/productService';
+import type { ProductImage } from '../services/productService';
+
+export interface CartProductSnapshot {
+  ProductId: number;
+  ProductName: string;
+  Price: string;
+  Quantity: number;
+  ProductImage?: ProductImage[] | null;
+}
 
 export interface CartItem {
-  product: Product;
+  product: CartProductSnapshot;
   quantity: number;
 }

@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --page-bg: #1f1714;
-  --shell-bg: #f6efe5;
-  --paper: #fbf7f0;
-  --ink: #17110f;
-  --muted: #6b6258;
-  --line: #d9cec1;
-  --card: #f4f0ea;
-  --accent: #b89f74;
-  --gold: #d6c66f;
+  --page-bg: #F7F5F0;
+  --shell-bg: #F7F5F0;
+  --paper: #FFFFFF;
+  --ink: #1C1C1C;
+  --muted: #8c8c8c;
+  --line: #E5E5E5;
+  --card: #F9F7F3;
+  --accent: #D8DDD3;
+  --gold: #CBAA73;
 }
 
 @theme inline {
-  --font-serif: Georgia, "Times New Roman", serif;
-  --font-sans: "Inter", "Segoe UI", Arial, sans-serif;
+  --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), "Segoe UI", Arial, sans-serif;
   --font-script: "Brush Script MT", cursive;
 }
 
@@ -26,7 +26,6 @@ body {
   background-color: var(--shell-bg);
   color: var(--ink);
   font-family: var(--font-sans);
-  letter-spacing: -0.01em;
   min-height: 100vh;
 }
 
@@ -76,8 +75,6 @@ img {
 
 .section-title {
   font-family: var(--font-serif);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .focus-ring:focus-visible {

@@ -23,7 +23,7 @@ export default function BrandPartners() {
           {BRANDS.map((brand, index) => (
             <div
               key={brand.name}
-              className="shrink-0 flex items-center justify-center min-w-[100px] h-12 px-4 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-pointer animate-fade-in-up"
+              className="shrink-0 flex items-center justify-center min-w-25 h-12 px-4 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-pointer animate-fade-in-up"
               style={{ animationDelay: `${index * 0.06}s` }}
               title={brand.name}
             >

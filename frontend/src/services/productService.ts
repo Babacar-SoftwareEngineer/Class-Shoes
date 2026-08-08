@@ -18,6 +18,32 @@ export interface Product {
   CreatedAt: string;
   Category?: Category | null;
   ProductImage?: ProductImage[];
+  ProductReview?: ProductReview[];
+}
+
+export interface ProductReview {
+  ReviewId: number;
+  Rating: number;
+  Comment?: string | null;
+  UserProfile?: { DisplayName: string } | null;
+}
+
+export async function getProductById(id: number): Promise<Product | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur lors de la récupération : ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    return result.data;
+  } catch {
+    const fallback = fallbackProducts.find((product) => product.ProductId === id);
+    return fallback ?? null;
+  }
 }
 
 export interface PaginationMeta {

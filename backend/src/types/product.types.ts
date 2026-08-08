@@ -1,4 +1,5 @@
 import type { PaginationMeta } from './api.types.js';
+import type { Product } from '../generated/prisma/client.js';
 
 export interface FetchProductsParams {
   page?: number | undefined;
@@ -12,6 +13,6 @@ export interface FetchProductsParams {
 }
 
 export interface PaginatedProductsResult {
-  products: any[];
+  products: Product[];
   pagination: PaginationMeta;
 }
