@@ -66,7 +66,13 @@ npx prisma migrate deploy
 npm run seed
 ```
 
-Le seed réinitialise les données de développement. Ne pas l'exécuter sur une base de production sans vérification.
+Les prix sont stockés directement en FCFA dans PostgreSQL. La migration
+`20260810152000_convert_prices_to_xof` convertit les anciennes valeurs vers le
+FCFA, y compris les prix des variantes, les coupons, les commandes et les paiements.
+
+Le seed réinitialise les données de développement. Il ne doit jamais être exécuté
+sur une base de production, car il supprime les données existantes avant de créer
+les données de démonstration.
 
 ### 5. Démarrer l'API
 
@@ -142,6 +148,16 @@ npm run build
 npm start
 npm run seed
 ```
+
+En production, utiliser uniquement les migrations :
+
+```powershell
+cd backend
+npx prisma generate
+npx prisma migrate deploy
+```
+
+Ne pas exécuter `npm run seed` en production.
 
 ### Test de charge
 

@@ -78,7 +78,7 @@ const fallbackProducts: Product[] = [
   {
     ProductId: 1,
     ProductName: 'Mini sac à chaîne noir',
-    Price: '129.00',
+    Price: '84618.00',
     Quantity: 8,
     CategoryId: 1,
     IsActive: true,
@@ -94,7 +94,7 @@ const fallbackProducts: Product[] = [
   {
     ProductId: 2,
     ProductName: 'Cabas cuir grainé ivoire',
-    Price: '189.00',
+    Price: '123976.00',
     Quantity: 6,
     CategoryId: 2,
     IsActive: true,
@@ -110,7 +110,7 @@ const fallbackProducts: Product[] = [
   {
     ProductId: 3,
     ProductName: 'Sac bandoulière rouge',
-    Price: '159.00',
+    Price: '104297.00',
     Quantity: 3,
     CategoryId: 3,
     IsActive: true,
@@ -126,7 +126,7 @@ const fallbackProducts: Product[] = [
   {
     ProductId: 4,
     ProductName: 'Escarpins slingback noirs',
-    Price: '149.00',
+    Price: '97738.00',
     Quantity: 7,
     CategoryId: 4,
     IsActive: true,
@@ -142,7 +142,7 @@ const fallbackProducts: Product[] = [
   {
     ProductId: 5,
     ProductName: 'Sandales à talon nude',
-    Price: '139.00',
+    Price: '91178.00',
     Quantity: 4,
     CategoryId: 5,
     IsActive: true,
@@ -158,7 +158,7 @@ const fallbackProducts: Product[] = [
   {
     ProductId: 6,
     ProductName: 'Bottines cuir chocolat',
-    Price: '210.00',
+    Price: '137751.00',
     Quantity: 2,
     CategoryId: 6,
     IsActive: true,
@@ -174,7 +174,7 @@ const fallbackProducts: Product[] = [
   {
     ProductId: 7,
     ProductName: 'Sneakers femme blanches',
-    Price: '135.00',
+    Price: '88554.00',
     Quantity: 15,
     CategoryId: 8,
     IsActive: true,
@@ -190,7 +190,7 @@ const fallbackProducts: Product[] = [
   {
     ProductId: 8,
     ProductName: 'Ballerines ivoire',
-    Price: '119.00',
+    Price: '78059.00',
     Quantity: 9,
     CategoryId: 7,
     IsActive: true,

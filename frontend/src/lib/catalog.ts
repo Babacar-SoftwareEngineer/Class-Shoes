@@ -24,6 +24,6 @@ export const HOUSE_LINKS = [
 ] as const;
 
 export function formatPrice(value: number | string): string {
-  const amount = Math.round(Number(value) * 655.957);
+  const amount = Math.round(Number(value));
   return `${new Intl.NumberFormat('fr-FR').format(amount)} FCFA`;
 }

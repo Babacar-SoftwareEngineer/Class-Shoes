@@ -174,7 +174,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
 
                 <div>
                   <label className="mb-2 block text-[10px] uppercase tracking-[0.22em] text-(--muted)">
-                    Prix
+                    Prix (FCFA)
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input

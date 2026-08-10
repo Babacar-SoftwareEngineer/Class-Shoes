@@ -37,7 +37,7 @@ const products: SeedProduct[] = [
   {
     name: 'Mini sac à chaîne noir',
     category: 'Sacs à main',
-    price: 129,
+    price: 84618,
     quantity: 8,
     images: [bag(0), bag(1)],
     daysAgo: 1,
@@ -45,7 +45,7 @@ const products: SeedProduct[] = [
   {
     name: 'Cabas cuir grainé ivoire',
     category: 'Cabas',
-    price: 189,
+    price: 123976,
     quantity: 6,
     images: [bag(2)],
     daysAgo: 2,
@@ -53,7 +53,7 @@ const products: SeedProduct[] = [
   {
     name: 'Sac bandoulière rouge',
     category: 'Sacs bandoulière',
-    price: 159,
+    price: 104297,
     quantity: 3,
     images: [bag(1)],
     daysAgo: 3,
@@ -61,7 +61,7 @@ const products: SeedProduct[] = [
   {
     name: 'Tote structuré beige',
     category: 'Cabas',
-    price: 220,
+    price: 144311,
     quantity: 11,
     images: [bag(3), bag(4)],
     daysAgo: 4,
@@ -69,7 +69,7 @@ const products: SeedProduct[] = [
   {
     name: 'Sac seau camel',
     category: 'Sacs à main',
-    price: 175,
+    price: 114792,
     quantity: 5,
     images: [bag(4)],
     daysAgo: 5,
@@ -77,7 +77,7 @@ const products: SeedProduct[] = [
   {
     name: 'Pochette rose poudré',
     category: 'Sacs à main',
-    price: 99,
+    price: 64940,
     quantity: 12,
     images: [bag(5)],
     daysAgo: 6,
@@ -85,7 +85,7 @@ const products: SeedProduct[] = [
   {
     name: 'Escarpins slingback noirs',
     category: 'Escarpins',
-    price: 149,
+    price: 97738,
     quantity: 7,
     images: [shoe(0), shoe(4)],
     daysAgo: 7,
@@ -93,7 +93,7 @@ const products: SeedProduct[] = [
   {
     name: 'Sandales à talon nude',
     category: 'Sandales',
-    price: 139,
+    price: 91178,
     quantity: 4,
     images: [shoe(3)],
     daysAgo: 8,
@@ -101,7 +101,7 @@ const products: SeedProduct[] = [
   {
     name: 'Bottines cuir chocolat',
     category: 'Bottines',
-    price: 210,
+    price: 137751,
     quantity: 2,
     images: [shoe(2)],
     daysAgo: 9,
@@ -109,7 +109,7 @@ const products: SeedProduct[] = [
   {
     name: 'Ballerines ivoire',
     category: 'Ballerines',
-    price: 119,
+    price: 78059,
     quantity: 9,
     images: [shoe(6)],
     daysAgo: 10,
@@ -117,7 +117,7 @@ const products: SeedProduct[] = [
   {
     name: 'Sneakers femme blanches',
     category: 'Sneakers femme',
-    price: 135,
+    price: 88554,
     quantity: 15,
     images: [shoe(1), shoe(7)],
     daysAgo: 11,
@@ -125,7 +125,7 @@ const products: SeedProduct[] = [
   {
     name: 'Mules camel',
     category: 'Mules',
-    price: 129,
+    price: 84618,
     quantity: 5,
     images: [shoe(5)],
     daysAgo: 12,
@@ -133,7 +133,7 @@ const products: SeedProduct[] = [
   {
     name: 'Escarpins rouges vernis',
     category: 'Escarpins',
-    price: 159,
+    price: 104297,
     quantity: 1,
     images: [shoe(0)],
     daysAgo: 13,
@@ -141,7 +141,7 @@ const products: SeedProduct[] = [
   {
     name: 'Bottes hautes noires',
     category: 'Bottines',
-    price: 249,
+    price: 163333,
     quantity: 2,
     images: [shoe(2), shoe(4)],
     daysAgo: 14,
@@ -149,7 +149,7 @@ const products: SeedProduct[] = [
   {
     name: 'Mocassins cuir brun',
     category: 'Mocassins',
-    price: 169,
+    price: 110857,
     quantity: 6,
     images: [shoe(7)],
     daysAgo: 15,
@@ -157,7 +157,7 @@ const products: SeedProduct[] = [
   {
     name: 'Sandales plates dorées',
     category: 'Sandales',
-    price: 89,
+    price: 58380,
     quantity: 13,
     images: [shoe(3), shoe(6)],
     daysAgo: 16,

@@ -8,7 +8,7 @@ const FALLBACK_HOME_CARDS: ProductCardData[] = [
   {
     id: 1001,
     name: 'Mini sac à chaîne noir',
-    price: 129,
+    price: 84618,
     image: 'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?auto=format&fit=crop&w=1200&q=80',
     category: 'Sacs à main',
     rating: 4.8,
@@ -18,7 +18,7 @@ const FALLBACK_HOME_CARDS: ProductCardData[] = [
   {
     id: 1002,
     name: 'Cabas cuir grainé ivoire',
-    price: 189,
+    price: 123976,
     image: 'https://images.unsplash.com/photo-1559563458-527698bf5295?auto=format&fit=crop&w=1200&q=80',
     category: 'Cabas',
     rating: 4.7,
@@ -28,7 +28,7 @@ const FALLBACK_HOME_CARDS: ProductCardData[] = [
   {
     id: 1003,
     name: 'Sac bandoulière rouge',
-    price: 159,
+    price: 104297,
     image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1200&q=80',
     category: 'Sacs bandoulière',
     rating: 4.6,
@@ -38,7 +38,7 @@ const FALLBACK_HOME_CARDS: ProductCardData[] = [
   {
     id: 1004,
     name: 'Escarpins slingback noirs',
-    price: 149,
+    price: 97738,
     image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80',
     category: 'Escarpins',
     rating: 4.9,
@@ -48,7 +48,7 @@ const FALLBACK_HOME_CARDS: ProductCardData[] = [
   {
     id: 1005,
     name: 'Sandales à talon nude',
-    price: 139,
+    price: 91178,
     image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=1200&q=80',
     category: 'Sandales',
     rating: 4.8,
@@ -58,7 +58,7 @@ const FALLBACK_HOME_CARDS: ProductCardData[] = [
   {
     id: 1006,
     name: 'Bottines cuir chocolat',
-    price: 210,
+    price: 137751,
     image: 'https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=1200&q=80',
     category: 'Bottines',
     rating: 4.5,
@@ -68,7 +68,7 @@ const FALLBACK_HOME_CARDS: ProductCardData[] = [
   {
     id: 1007,
     name: 'Sneakers femme blanches',
-    price: 135,
+    price: 88554,
     image: 'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&w=1200&q=80',
     category: 'Sneakers femme',
     rating: 4.9,
@@ -78,7 +78,7 @@ const FALLBACK_HOME_CARDS: ProductCardData[] = [
   {
     id: 1008,
     name: 'Ballerines ivoire',
-    price: 119,
+    price: 78059,
     image: 'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=1200&q=80',
     category: 'Ballerines',
     rating: 4.8,
