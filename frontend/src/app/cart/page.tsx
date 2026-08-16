@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '../../hooks/useCart';
 import { formatPrice } from '../../lib/catalog';
+import { normalizeImageSrc } from '../../lib/image';
 
 export default function CartPage() {
   const { items, updateQuantity, removeItem, clearCart, totalPrice, totalItems, isMounted } = useCart();
@@ -34,7 +35,7 @@ export default function CartPage() {
         <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_320px]">
           <div className="divide-y divide-(--line) border-y border-(--line)">
             {items.map((item) => {
-              const imageUrl = item.product.ProductImage?.[0]?.ImageUrl ?? '/p1.jpg';
+              const imageUrl = normalizeImageSrc(item.product.ProductImage?.[0]?.ImageUrl);
               return (
                 <article key={item.product.ProductId} className="grid grid-cols-[88px_1fr_auto] gap-4 py-5 sm:grid-cols-[112px_1fr_auto] sm:gap-6">
                   <div className="relative aspect-square overflow-hidden rounded-lg bg-(--card)"><Image src={imageUrl} alt={item.product.ProductName} fill sizes="112px" className="object-cover" /></div>
@@ -59,7 +60,7 @@ export default function CartPage() {
             <div className="flex justify-between text-sm"><span className="text-(--muted)">Articles</span><span>{totalItems}</span></div>
             <div className="mt-4 flex justify-between border-t border-(--line) pt-4 text-lg"><span>Total</span><span>{formatPrice(totalPrice)}</span></div>
             <p className="mt-4 text-xs leading-5 text-(--muted)">Livraison et retours offerts dans le monde entier.</p>
-            <Link href="/order" className="mt-8 flex w-full items-center justify-center bg-[#1c1c1c] px-6 py-4 text-[10px] font-medium uppercase tracking-[0.22em] text-white! transition-colors hover:bg-[#333333]">Passer la commande</Link>
+            <Link href="/order" className="mt-8 flex w-full items-center justify-center bg-[#1c1c1c] px-6 py-4 text-[10px] font-medium uppercase tracking-[0.22em] text-white transition-colors hover:bg-[#333333]">Passer la commande</Link>
           </aside>
         </div>
       </div>

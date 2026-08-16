@@ -88,6 +88,12 @@ model OrderStatus {
 model Orders {
   OrderId            Int                  @id @default(autoincrement())
   UserId             Int?
+  CustomerName       String?              @db.VarChar(150)
+  CustomerEmail      String?              @db.VarChar(255)
+  CustomerPhone      String?              @db.VarChar(50)
+  ShippingRegion     String?              @db.VarChar(100)
+  ShippingCity       String?              @db.VarChar(100)
+  ShippingAddress    String?              @db.VarChar(255)
   OrderDate          DateTime?            @default(now()) @db.Timestamptz(6)
   TotalAmount        Decimal              @db.Decimal(10, 2)
   OrderCoupon        OrderCoupon[]
@@ -112,6 +118,7 @@ model PaymentInformation {
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model Product {
   ProductId      Int              @id @default(autoincrement())
+  WooCommerceId  Int?             @unique
   ProductName    String           @db.VarChar(255)
   Price          Decimal          @db.Decimal(10, 2)
   Quantity       Int              @default(0)

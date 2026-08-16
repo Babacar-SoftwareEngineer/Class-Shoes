@@ -3,6 +3,7 @@ import Image from 'next/image';
 import AddToCartButton from '../../components/AddToCartButton';
 import { getProducts, ProductFilters, Product } from '../../services/productService';
 import { CATALOG_CATEGORIES, formatPrice } from '../../lib/catalog';
+import { normalizeImageSrc } from '../../lib/image';
 
 interface PageProps {
   searchParams: Promise<{
@@ -51,7 +52,17 @@ export default async function ProductsPage({ searchParams }: PageProps) {
     sortOrder: currentSortOrder,
   };
 
-  const response = await getProducts(filters);
+  const response = await getProducts(filters).catch(() => ({
+    data: [],
+    pagination: {
+      totalItems: 0,
+      totalPages: 1,
+      currentPage: 1,
+      limit: 9,
+      hasNextPage: false,
+      hasPrevPage: false,
+    },
+  }));
   const products = response.data || [];
   const pagination = response.pagination || {
     totalItems: 0,
@@ -62,7 +73,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
     hasPrevPage: false,
   };
 
-  const defaultImage = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80';
+  const defaultImage = '/p1.jpg';
   const isShoesPage = currentCategory === 4;
 
   return (
@@ -270,7 +281,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                       <div className="relative aspect-square overflow-hidden rounded-xl bg-(--card)">
                         <Link href={`/product/${product.ProductId}`} className="absolute inset-0">
                           <Image
-                            src={imageUrl}
+                            src={normalizeImageSrc(imageUrl)}
                             alt={product.ProductName}
                             fill
                             sizes="(max-width: 1024px) 50vw, 33vw"

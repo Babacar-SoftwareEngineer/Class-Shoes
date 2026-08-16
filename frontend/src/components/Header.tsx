@@ -2,13 +2,18 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useCart } from '../hooks/useCart';
 import ClassShoesLogo from './ClassShoesLogo';
 import { HOUSE_LINKS } from '../lib/catalog';
 import CartDrawer from './CartDrawer';
+import { useAuthStore } from '../store/useAuthStore';
 
 export default function Header() {
+  const router = useRouter();
   const { totalItems } = useCart();
+  const user = useAuthStore((state) => state.user);
+  const clearSession = useAuthStore((state) => state.clearSession);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
 
@@ -27,7 +32,7 @@ export default function Header() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-[11px] font-semibold uppercase tracking-[0.22em] text-(--muted) transition-colors hover:text-(--ink) focus-ring"
+                className="text-xs font-semibold uppercase tracking-[0.15em] text-(--muted) transition-colors hover:text-(--ink) focus-ring"
               >
                 {link.label}
               </Link>
@@ -54,6 +59,32 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </Link>
+            {user ? (
+              <div className="hidden items-center gap-2 sm:flex">
+                <span className="text-[10px] uppercase tracking-[0.18em] text-(--muted)">
+                  {user.DisplayName || user.Email}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearSession();
+                    router.push('/');
+                  }}
+                  className="rounded-full border border-(--line) px-5 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-(--ink) transition-all hover:border-(--ink) hover:bg-gray-50"
+                >
+                  Déconnexion
+                </button>
+              </div>
+            ) : (
+              <div className="hidden items-center gap-3 sm:flex">
+                <Link href="/login" className="rounded-full border border-(--line) px-5 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-(--ink) transition-all hover:border-(--ink) hover:bg-gray-50">
+                  Connexion
+                </Link>
+                <Link href="/register" className="rounded-full bg-(--ink) px-5 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-white shadow-md transition-all hover:scale-105 hover:bg-(--muted) text-white hover:shadow-lg">
+                  Inscription
+                </Link>
+              </div>
+            )}
             <button type="button" onClick={() => setCartOpen(true)} className="relative rounded-full p-2 transition-colors hover:text-(--ink) focus-ring" title="Ouvrir le panier" aria-label="Ouvrir le panier">
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -82,6 +113,28 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
+            {!user ? (
+              <>
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="pt-2 transition-colors hover:text-(--ink)">
+                  Connexion
+                </Link>
+                <Link href="/register" onClick={() => setMobileMenuOpen(false)} className="transition-colors hover:text-(--ink)">
+                  Inscription
+                </Link>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  clearSession();
+                  setMobileMenuOpen(false);
+                  router.push('/');
+                }}
+                className="pt-2 text-left transition-colors hover:text-(--ink)"
+              >
+                Déconnexion
+              </button>
+            )}
             <Link
               href="/products"
               onClick={() => setMobileMenuOpen(false)}

@@ -5,10 +5,6 @@ BEGIN;
 UPDATE "Product"
 SET "Price" = ROUND("Price" * 655.957, 2);
 
-UPDATE "ProductVariant"
-SET "Price" = ROUND("Price" * 655.957, 2)
-WHERE "Price" IS NOT NULL;
-
 UPDATE "Coupon"
 SET "DiscountAmount" = ROUND("DiscountAmount" * 655.957, 2);
 

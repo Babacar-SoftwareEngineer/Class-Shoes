@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
 import { useCart } from '../hooks/useCart';
 import { formatPrice } from '../lib/catalog';
+import { normalizeImageSrc } from '../lib/image';
 
 interface CartDrawerProps {
   open: boolean;
@@ -31,9 +32,9 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
   if (!open || typeof document === 'undefined') return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-100 flex justify-end" role="dialog" aria-modal="true" aria-label="Panier">
+    <div className="fixed inset-0 z-[100] flex justify-end" role="dialog" aria-modal="true" aria-label="Panier">
       <button type="button" aria-label="Fermer le panier" onClick={onClose} className="absolute inset-0 cursor-default bg-black/65" />
-      <aside className="relative z-10 flex h-dvh w-full max-w-115 flex-col overflow-hidden bg-(--shell-bg) shadow-2xl">
+      <aside className="relative z-10 flex h-dvh w-full max-w-[460px] flex-col overflow-hidden bg-(--shell-bg) shadow-2xl">
         <div className="flex items-center justify-between border-b border-(--line) px-6 py-6 sm:px-8">
           <h2 className="text-lg uppercase tracking-[0.18em] text-(--ink)">Panier</h2>
           <button type="button" onClick={onClose} aria-label="Fermer le panier" className="text-2xl leading-none text-(--muted) hover:text-(--ink)">×</button>
@@ -46,7 +47,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           ) : null}
           {isMounted && items.length > 0 ? items.map((item) => (
             <article key={item.product.ProductId} className="grid grid-cols-[100px_1fr_auto] gap-4 border-b border-(--line) py-6">
-              <div className="relative aspect-square overflow-hidden rounded-lg bg-(--card)"><Image src={item.product.ProductImage?.[0]?.ImageUrl ?? '/p1.jpg'} alt={item.product.ProductName} fill sizes="100px" className="object-cover" /></div>
+              <div className="relative aspect-square overflow-hidden rounded-lg bg-(--card)"><Image src={normalizeImageSrc(item.product.ProductImage?.[0]?.ImageUrl)} alt={item.product.ProductName} fill sizes="100px" className="object-cover" /></div>
               <div className="min-w-0">
                 <p className="truncate text-sm text-(--ink)">{item.product.ProductName}</p>
                 <p className="mt-1 text-xs text-(--muted)">Quantité disponible : {item.product.Quantity}</p>
@@ -65,7 +66,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           <div className="border-t border-(--line) px-6 py-6 sm:px-8">
             <div className="flex justify-between text-lg text-(--ink)"><span>Sous-total</span><span>{formatPrice(totalPrice)}</span></div>
             <p className="mt-3 text-xs leading-5 text-(--muted)">Livraison et taxes calculées au moment de la commande.</p>
-            <Link href="/order" onClick={onClose} className="mt-6 flex w-full items-center justify-center rounded-full bg-[#1c1c1c] px-6 py-4 text-[10px] font-medium uppercase tracking-[0.22em] text-white! transition-colors hover:bg-[#333333]">Passer la commande</Link>
+            <Link href="/order" onClick={onClose} className="mt-6 flex w-full items-center justify-center rounded-full bg-[#1c1c1c] px-6 py-4 text-[10px] font-medium uppercase tracking-[0.22em] text-white transition-colors hover:bg-[#333333]">Passer la commande</Link>
           </div>
         ) : null}
       </aside>

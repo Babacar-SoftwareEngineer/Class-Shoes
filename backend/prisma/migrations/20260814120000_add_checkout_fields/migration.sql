@@ -1,0 +1,6 @@
+ALTER TABLE "Orders" ADD COLUMN "CustomerName" VARCHAR(150);
+ALTER TABLE "Orders" ADD COLUMN "CustomerEmail" VARCHAR(255);
+ALTER TABLE "Orders" ADD COLUMN "CustomerPhone" VARCHAR(50);
+ALTER TABLE "Orders" ADD COLUMN "ShippingRegion" VARCHAR(100);
+ALTER TABLE "Orders" ADD COLUMN "ShippingCity" VARCHAR(100);
+ALTER TABLE "Orders" ADD COLUMN "ShippingAddress" VARCHAR(255);

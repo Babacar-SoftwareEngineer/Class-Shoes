@@ -13,8 +13,8 @@
 }
 
 @theme inline {
-  --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-inter), "Segoe UI", Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-sans: "Segoe UI", Arial, sans-serif;
   --font-script: "Brush Script MT", cursive;
 }
 

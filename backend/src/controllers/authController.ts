@@ -5,10 +5,13 @@ import { generateToken } from '../utils/jwt.js';
 import type { AuthenticatedRequest } from '../middlewares/auth.js';
 import { ConflictError, UnauthorizedError, NotFoundError } from '../errors/AppError.js';
 
-function withoutPassword<T extends { PasswordHash?: string | null }>(user: T): Omit<T, 'PasswordHash'> {
+function withoutSensitiveFields<T extends { PasswordHash?: string | null; AuthId?: string | null }>(
+  user: T
+): Omit<T, 'PasswordHash' | 'AuthId'> {
   const safeUser = { ...user } as Partial<T>;
   delete safeUser.PasswordHash;
-  return safeUser as Omit<T, 'PasswordHash'>;
+  delete safeUser.AuthId;
+  return safeUser as Omit<T, 'PasswordHash' | 'AuthId'>;
 }
 
 /**
@@ -41,10 +44,15 @@ export async function register(req: Request, res: Response): Promise<void> {
   });
 
   // Retourner l'utilisateur créé sans le mot de passe haché
-  const userWithoutPassword = withoutPassword(user);
+  const token = generateToken({
+    userId: user.UserId,
+    email: user.Email,
+  });
+  const userWithoutPassword = withoutSensitiveFields(user);
   res.status(201).json({
     success: true,
     message: 'Inscription réussie.',
+    token,
     user: userWithoutPassword,
   });
 }
@@ -78,7 +86,7 @@ export async function login(req: Request, res: Response): Promise<void> {
   });
 
   // Retourner les infos de l'utilisateur (sans le hash) et le token
-  const userWithoutPassword = withoutPassword(user);
+  const userWithoutPassword = withoutSensitiveFields(user);
   res.status(200).json({
     success: true,
     message: 'Connexion réussie.',
@@ -103,7 +111,7 @@ export async function getProfile(req: AuthenticatedRequest, res: Response): Prom
     throw new NotFoundError('Utilisateur non trouvé.');
   }
 
-  const userWithoutPassword = withoutPassword(user);
+  const userWithoutPassword = withoutSensitiveFields(user);
   res.status(200).json({
     success: true,
     user: userWithoutPassword,

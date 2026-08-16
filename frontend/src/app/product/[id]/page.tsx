@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import ProductPurchasePanel from '../../../components/ProductPurchasePanel';
 import { getProductById, getProducts } from '../../../services/productService';
 import { formatPrice } from '../../../lib/catalog';
+import { normalizeImageSrc } from '../../../lib/image';
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -11,7 +12,7 @@ interface ProductPageProps {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
-  const product = await getProductById(Number(id));
+  const product = await getProductById(Number(id)).catch(() => null);
 
   if (!product) {
     notFound();
@@ -37,13 +38,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
           <div>
             <div className="relative aspect-square overflow-hidden rounded-xl bg-(--card)">
-              <Image src={images[0].ImageUrl} alt={product.ProductName} fill priority sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover" />
+              <Image src={normalizeImageSrc(images[0].ImageUrl)} alt={product.ProductName} fill priority sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover" />
             </div>
             {images.length > 1 ? (
               <div className="mt-3 grid grid-cols-4 gap-3">
                 {images.map((image) => (
                   <div key={image.ImageId} className="relative aspect-square overflow-hidden rounded-lg bg-(--card)">
-                    <Image src={image.ImageUrl} alt="" fill sizes="120px" className="object-cover" />
+                    <Image src={normalizeImageSrc(image.ImageUrl)} alt="" fill sizes="120px" className="object-cover" />
                   </div>
                 ))}
               </div>
@@ -79,7 +80,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {related.map((item) => (
                 <Link key={item.ProductId} href={`/product/${item.ProductId}`} className="group">
                   <div className="relative aspect-square overflow-hidden rounded-xl bg-(--card)">
-                    <Image src={item.ProductImage?.[0]?.ImageUrl ?? '/p1.jpg'} alt={item.ProductName} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <Image src={normalizeImageSrc(item.ProductImage?.[0]?.ImageUrl)} alt={item.ProductName} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                   </div>
                   <div className="mt-3 flex justify-between gap-3 text-xs"><span>{item.ProductName}</span><span>{formatPrice(item.Price)}</span></div>
                 </Link>

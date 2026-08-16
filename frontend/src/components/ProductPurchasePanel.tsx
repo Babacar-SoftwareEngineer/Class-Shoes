@@ -51,7 +51,7 @@ export default function ProductPurchasePanel({ product }: ProductPurchasePanelPr
           <span className="w-8 text-center text-sm">{quantity}</span>
           <button type="button" onClick={() => setQuantity((value) => Math.min(product.Quantity, value + 1))} disabled={quantity >= product.Quantity} className="h-full w-10 text-(--muted) hover:text-(--ink) disabled:opacity-30" aria-label="Augmenter la quantité">+</button>
         </div>
-        <button type="button" onClick={addToBag} disabled={product.Quantity === 0} className="inline-flex h-12 min-w-45 items-center justify-center bg-(--ink) px-6 text-[10px] uppercase tracking-[0.22em] text-white transition-colors hover:bg-(--muted) disabled:cursor-not-allowed disabled:bg-(--line)">{added ? 'Ajouté au panier' : 'Ajouter au panier'}</button>
+        <button type="button" onClick={addToBag} disabled={product.Quantity === 0} className="inline-flex h-12 min-w-[180px] items-center justify-center bg-(--ink) px-6 text-[10px] uppercase tracking-[0.22em] text-white transition-colors hover:bg-(--muted) disabled:cursor-not-allowed disabled:bg-(--line)">{added ? 'Ajouté au panier' : 'Ajouter au panier'}</button>
         <Link href="/cart" className="inline-flex h-12 items-center justify-center border border-(--line) px-5 text-[10px] uppercase tracking-[0.2em] text-(--ink) hover:border-(--ink)">Voir le panier</Link>
       </div>
     </>

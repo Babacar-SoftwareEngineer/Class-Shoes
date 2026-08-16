@@ -2,7 +2,8 @@
   "name": "frontend",
   "version": "0.1.0",
   "scripts": {
-    "dev": "next dev",
+    "predev": "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\"",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

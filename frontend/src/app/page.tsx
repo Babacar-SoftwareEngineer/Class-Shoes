@@ -3,6 +3,24 @@ import CategoryBar from '../components/home/CategoryBar';
 import ProductGrid, { ProductCardData } from '../components/home/ProductGrid';
 import EditorialSection from '../components/home/EditorialSection';
 import { getProducts, Product } from '../services/productService';
+import { normalizeImageSrc } from '../lib/image';
+
+function mapBackendProduct(product: Product, index: number): ProductCardData {
+  const image = normalizeImageSrc(product.ProductImage?.[0]?.ImageUrl);
+
+  const badgeCycle = ['best seller', 'new', 'trending', 'limited'] as const;
+
+  return {
+    id: product.ProductId,
+    name: product.ProductName,
+    price: Number(product.Price),
+    image,
+    category: product.Category?.CategoryName ?? 'Collection',
+    rating: 4.5 + ((index % 4) * 0.1),
+    reviews: 40 + index * 7,
+    badge: badgeCycle[index % badgeCycle.length],
+  };
+}
 
 const FALLBACK_HOME_CARDS: ProductCardData[] = [
   {
@@ -87,24 +105,6 @@ const FALLBACK_HOME_CARDS: ProductCardData[] = [
   },
 ];
 
-function mapBackendProduct(product: Product, index: number): ProductCardData {
-  const image = product.ProductImage?.[0]?.ImageUrl
-    ?? 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80';
-
-  const badgeCycle = ['best seller', 'new', 'trending', 'limited'] as const;
-
-  return {
-    id: product.ProductId,
-    name: product.ProductName,
-    price: Number(product.Price),
-    image,
-    category: product.Category?.CategoryName ?? 'Collection',
-    rating: 4.5 + ((index % 4) * 0.1),
-    reviews: 40 + index * 7,
-    badge: badgeCycle[index % badgeCycle.length],
-  };
-}
-
 function normalizeHomeCards(cards: ProductCardData[]): ProductCardData[] {
   const normalized = [...cards];
 
@@ -126,8 +126,15 @@ function normalizeHomeCards(cards: ProductCardData[]): ProductCardData[] {
 }
 
 export default async function Home() {
-  const response = await getProducts({ limit: 16, sortBy: 'CreatedAt', sortOrder: 'desc' });
-  const backendCards = response.data.map(mapBackendProduct);
+  let backendCards: ProductCardData[] = [];
+
+  try {
+    const response = await getProducts({ limit: 16, sortBy: 'CreatedAt', sortOrder: 'desc' });
+    backendCards = response.data.map(mapBackendProduct);
+  } catch {
+    backendCards = [];
+  }
+
   const homeCards = normalizeHomeCards(backendCards.length > 0 ? backendCards : FALLBACK_HOME_CARDS);
 
   const firstSelection = homeCards.slice(0, 8);

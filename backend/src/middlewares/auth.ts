@@ -32,3 +32,29 @@ export function authenticateToken(
     throw new ForbiddenError("Jeton d'accès invalide ou expiré.");
   }
 }
+
+/**
+ * Middleware optionnel: garde l'utilisateur si un token est présent,
+ * mais laisse passer les requêtes invitées.
+ */
+export function authenticateOptionalToken(
+  req: AuthenticatedRequest,
+  _res: Response,
+  next: NextFunction
+): void {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    next();
+    return;
+  }
+
+  try {
+    const decoded = verifyToken(token);
+    req.user = decoded;
+    next();
+  } catch {
+    throw new ForbiddenError("Jeton d'accès invalide ou expiré.");
+  }
+}

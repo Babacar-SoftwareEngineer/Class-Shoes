@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { Product } from '../services/productService';
 import type { CartItem, CartProductSnapshot } from '../types/cart';
+import { normalizeImageSrc } from '../lib/image';
 
 interface CartState {
   items: CartItem[];
@@ -18,7 +19,7 @@ const createProductSnapshot = (product: Product): CartProductSnapshot => ({
   Quantity: product.Quantity,
   ProductImage: product.ProductImage?.map((image) => ({
     ImageId: image.ImageId,
-    ImageUrl: image.ImageUrl,
+    ImageUrl: normalizeImageSrc(image.ImageUrl),
   })) ?? [],
 });
 
@@ -119,7 +120,10 @@ export const useCartStore = create<CartState>()(
             ProductName: item.product.ProductName,
             Price: item.product.Price,
             Quantity: item.product.Quantity,
-            ProductImage: item.product.ProductImage ?? [],
+            ProductImage: (item.product.ProductImage ?? []).map((image) => ({
+              ImageId: image.ImageId,
+              ImageUrl: normalizeImageSrc(image.ImageUrl),
+            })),
           },
         }));
 

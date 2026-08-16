@@ -40,7 +40,7 @@ export default function ProductGrid({ title, products, viewAllHref = '/products'
 
         <div className="flex w-full snap-x snap-mandatory gap-6 overflow-x-auto pb-6 scrollbar-hide">
           {products.map((product) => (
-            <article key={product.id} className="group relative flex w-65 shrink-0 snap-start flex-col sm:w-70">
+            <article key={product.id} className="group relative flex w-[260px] shrink-0 snap-start flex-col sm:w-[280px]">
               <div className="relative mb-4 aspect-square w-full overflow-hidden rounded-xl bg-(--card)">
                 {product.badge === 'new' && (
                   <span className="absolute left-3 top-3 z-10 flex h-7 items-center bg-white px-3 text-[10px] font-semibold text-(--ink)">

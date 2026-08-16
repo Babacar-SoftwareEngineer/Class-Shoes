@@ -3,20 +3,6 @@ import './globals.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-import { Inter, Playfair_Display } from 'next/font/google';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-playfair',
-});
-
 export const metadata: Metadata = {
   title: 'Class Shoes - Maison de mode',
   description:
@@ -29,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${inter.variable} ${playfair.variable} h-full antialiased`}>
+    <html lang="fr" className="h-full antialiased">
       <body className="min-h-screen bg-(--shell-bg) text-(--ink) font-sans">
         <div className="flex min-h-screen w-full flex-col bg-(--shell-bg)">
           <Header />

@@ -2,11 +2,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const ECO_PRODUCTS = [
-  { id: 1, image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=300&q=80', name: 'Eco Runner' },
-  { id: 2, image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=300&q=80', name: 'Green Step' },
-  { id: 3, image: 'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&w=300&q=80', name: 'Nature Walk' },
-  { id: 4, image: 'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=300&q=80', name: 'Earth Sneaker' },
-  { id: 5, image: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=300&q=80', name: 'Bamboo Slide' },
+  { id: 1, image: '/p1.jpg', name: 'Eco Runner' },
+  { id: 2, image: '/p2.jpg', name: 'Green Step' },
+  { id: 3, image: '/p3.jpg', name: 'Nature Walk' },
+  { id: 4, image: '/p4.jpg', name: 'Earth Sneaker' },
+  { id: 5, image: '/p5.jpg', name: 'Bamboo Slide' },
 ];
 
 export default function EcoBanner() {
