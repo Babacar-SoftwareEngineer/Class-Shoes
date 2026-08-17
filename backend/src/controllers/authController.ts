@@ -48,11 +48,18 @@ export async function register(req: Request, res: Response): Promise<void> {
     userId: user.UserId,
     email: user.Email,
   });
+  // Créer le cookie
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
+  });
+
   const userWithoutPassword = withoutSensitiveFields(user);
   res.status(201).json({
     success: true,
     message: 'Inscription réussie.',
-    token,
     user: userWithoutPassword,
   });
 }
@@ -85,14 +92,33 @@ export async function login(req: Request, res: Response): Promise<void> {
     email: user.Email,
   });
 
-  // Retourner les infos de l'utilisateur (sans le hash) et le token
+  // Créer le cookie
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
+  });
+
+  // Retourner les infos de l'utilisateur (sans le hash)
   const userWithoutPassword = withoutSensitiveFields(user);
   res.status(200).json({
     success: true,
     message: 'Connexion réussie.',
-    token,
     user: userWithoutPassword,
   });
+}
+
+/**
+ * Déconnexion d'un utilisateur
+ */
+export function logout(_req: Request, res: Response): void {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  });
+  res.status(200).json({ success: true, message: 'Déconnexion réussie.' });
 }
 
 /**

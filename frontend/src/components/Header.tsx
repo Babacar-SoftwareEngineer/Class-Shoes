@@ -8,6 +8,7 @@ import ClassShoesLogo from './ClassShoesLogo';
 import { HOUSE_LINKS } from '../lib/catalog';
 import CartDrawer from './CartDrawer';
 import { useAuthStore } from '../store/useAuthStore';
+import { logoutUser } from '../services/authService';
 
 export default function Header() {
   const router = useRouter();
@@ -66,7 +67,8 @@ export default function Header() {
                 </span>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={async () => {
+                    await logoutUser().catch(console.error);
                     clearSession();
                     router.push('/');
                   }}
@@ -125,7 +127,8 @@ export default function Header() {
             ) : (
               <button
                 type="button"
-                onClick={() => {
+                onClick={async () => {
+                  await logoutUser().catch(console.error);
                   clearSession();
                   setMobileMenuOpen(false);
                   router.push('/');

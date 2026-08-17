@@ -17,8 +17,11 @@ export function authenticateToken(
   _res: Response,
   next: NextFunction
 ): void {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Format: Bearer <token>
+  let token = req.cookies?.token;
+  if (!token) {
+    const authHeader = req.headers['authorization'];
+    token = authHeader && authHeader.split(' ')[1]; // Format: Bearer <token>
+  }
 
   if (!token) {
     throw new UnauthorizedError('Accès non autorisé. Token manquant.');
@@ -42,8 +45,11 @@ export function authenticateOptionalToken(
   _res: Response,
   next: NextFunction
 ): void {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  let token = req.cookies?.token;
+  if (!token) {
+    const authHeader = req.headers['authorization'];
+    token = authHeader && authHeader.split(' ')[1];
+  }
 
   if (!token) {
     next();

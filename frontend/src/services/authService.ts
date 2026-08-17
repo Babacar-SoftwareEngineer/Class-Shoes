@@ -20,6 +20,7 @@ async function requestAuth(path: '/api/auth/register' | '/api/auth/login', paylo
     headers: {
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
     body: JSON.stringify(payload),
   });
 
@@ -36,4 +37,17 @@ export function registerUser(payload: RegisterPayload): Promise<AuthResponse> {
 
 export function loginUser(payload: LoginPayload): Promise<AuthResponse> {
   return requestAuth('/api/auth/login', payload);
+}
+
+export async function logoutUser(): Promise<{ success: boolean; message: string }> {
+  const response = await fetch(`${API_BASE_URL}/api/auth/logout`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error(await parseApiError(response));
+  }
+
+  return response.json();
 }

@@ -2,6 +2,8 @@ import express from 'express';
 import type { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import authRoutes from './routes/authRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import productRoutes from './routes/productRoutes.js';
@@ -19,6 +21,8 @@ const allowedOrigins = (process.env.CORS_ORIGIN ?? 'http://localhost:3000')
   .filter(Boolean);
 
 // Middlewares
+app.use(helmet());
+app.use(cookieParser());
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,

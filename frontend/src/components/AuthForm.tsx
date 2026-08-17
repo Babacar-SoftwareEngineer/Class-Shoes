@@ -48,7 +48,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           })
         : await loginUser({ email, password });
 
-      setSession(response.token, response.user);
+      setSession(response.user);
       router.push('/products');
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Une erreur est survenue.');

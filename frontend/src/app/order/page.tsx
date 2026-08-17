@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 import { useCart } from '../../hooks/useCart';
 import { formatPrice } from '../../lib/catalog';
@@ -11,8 +12,8 @@ import { useAuthStore } from '../../store/useAuthStore';
 import type { PaymentMethod } from '../../types/order';
 
 export default function OrderPage() {
+  const router = useRouter();
   const { items, totalPrice, clearCart, isMounted } = useCart();
-  const token = useAuthStore((state) => state.token);
   const user = useAuthStore((state) => state.user);
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -26,13 +27,16 @@ export default function OrderPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) {
+    if (isMounted && !user) {
+      router.push('/login');
       return;
     }
 
-    setFullName((current) => current || user.DisplayName || [user.FirstName, user.LastName].filter(Boolean).join(' '));
-    setEmail((current) => current || user.Email);
-  }, [user]);
+    if (user) {
+      setFullName((current) => current || user.DisplayName || [user.FirstName, user.LastName].filter(Boolean).join(' '));
+      setEmail((current) => current || user.Email);
+    }
+  }, [user, isMounted, router]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,8 +64,7 @@ export default function OrderPage() {
             productId: item.product.ProductId,
             quantity: item.quantity,
           })),
-        },
-        token
+        }
       );
 
       setSubmittedOrder({
@@ -78,6 +81,10 @@ export default function OrderPage() {
 
   if (!isMounted) {
     return <div className="flex min-h-[60vh] items-center justify-center text-sm text-(--muted)">Chargement de votre commande...</div>;
+  }
+
+  if (!user) {
+    return null; // Redirection en cours
   }
 
   if (submittedOrder) {

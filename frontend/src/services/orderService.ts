@@ -1,13 +1,13 @@
 import { API_BASE_URL, parseApiError } from '../lib/api';
 import type { CreateOrderPayload, CreateOrderResponse } from '../types/order';
 
-export async function createOrder(payload: CreateOrderPayload, token?: string | null): Promise<CreateOrderResponse> {
+export async function createOrder(payload: CreateOrderPayload): Promise<CreateOrderResponse> {
   const response = await fetch(`${API_BASE_URL}/api/orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
+    credentials: 'include',
     body: JSON.stringify(payload),
   });
 
