@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import prisma from './config/db.js';
+import { getRedisClient } from './config/redis.js';
 
 type SeedProduct = {
   name: string;
@@ -10,36 +11,18 @@ type SeedProduct = {
   daysAgo: number;
 };
 
-const BAG_IMAGES = [
-  'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1559563458-527698bf5295?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1614179689702-355944cd0918?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1600857062241-98e5dba7f214?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1682745230951-8a5aa9a474a0?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?auto=format&fit=crop&w=1200&q=80',
-] as const;
-
-const SHOE_IMAGES = [
-  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?auto=format&fit=crop&w=1200&q=80',
-] as const;
-
-const bag = (index: number) => BAG_IMAGES[index]!;
-const shoe = (index: number) => SHOE_IMAGES[index]!;
-
 const products: SeedProduct[] = [
   {
     name: 'Mini sac à chaîne noir',
     category: 'Sacs à main',
     price: 84618,
     quantity: 8,
-    images: [bag(0), bag(1)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436661/class-shoes/products/whatsappimage20260413at154206.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436662/class-shoes/products/whatsappimage20260413at1542001.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436663/class-shoes/products/whatsappimage20260413at154203.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436664/class-shoes/products/whatsappimage20260413at154205.jpg',
+    ],
     daysAgo: 1,
   },
   {
@@ -47,7 +30,11 @@ const products: SeedProduct[] = [
     category: 'Cabas',
     price: 123976,
     quantity: 6,
-    images: [bag(2)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436664/class-shoes/products/whatsappimage20260413at1542181.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436666/class-shoes/products/whatsappimage20260413at154216.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436667/class-shoes/products/whatsappimage20260413at154229.jpg',
+    ],
     daysAgo: 2,
   },
   {
@@ -55,7 +42,12 @@ const products: SeedProduct[] = [
     category: 'Sacs bandoulière',
     price: 104297,
     quantity: 3,
-    images: [bag(1)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436667/class-shoes/products/whatsappimage20260413at154200.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436670/class-shoes/products/whatsappimage20260413at154219.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436670/class-shoes/products/whatsappimage20260413at154227.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436671/class-shoes/products/whatsappimage20260413at1542292.jpg',
+    ],
     daysAgo: 3,
   },
   {
@@ -63,7 +55,13 @@ const products: SeedProduct[] = [
     category: 'Cabas',
     price: 144311,
     quantity: 11,
-    images: [bag(3), bag(4)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436672/class-shoes/products/whatsappimage20260413at1542291.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436673/class-shoes/products/whatsappimage20260413at154215.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436674/class-shoes/products/whatsappimage20260413at154218.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436675/class-shoes/products/whatsappimage20260413at154158.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436676/class-shoes/products/whatsappimage20260413at154210.jpg',
+    ],
     daysAgo: 4,
   },
   {
@@ -71,7 +69,11 @@ const products: SeedProduct[] = [
     category: 'Sacs à main',
     price: 114792,
     quantity: 5,
-    images: [bag(4)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436677/class-shoes/products/whatsappimage20260413at154212.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436677/class-shoes/products/whatsappimage20260413at154208.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436678/class-shoes/products/whatsappimage20260413at1542071.jpg',
+    ],
     daysAgo: 5,
   },
   {
@@ -79,7 +81,11 @@ const products: SeedProduct[] = [
     category: 'Sacs à main',
     price: 64940,
     quantity: 12,
-    images: [bag(5)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436679/class-shoes/products/whatsappimage20260413at154207.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436680/class-shoes/products/whatsappimage20260413at154209.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436681/class-shoes/products/whatsappimage20260414at1502501.jpg',
+    ],
     daysAgo: 6,
   },
   {
@@ -87,7 +93,12 @@ const products: SeedProduct[] = [
     category: 'Escarpins',
     price: 97738,
     quantity: 7,
-    images: [shoe(0), shoe(4)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436681/class-shoes/products/whatsappimage20260414at1502503.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436682/class-shoes/products/whatsappimage20260414at150250.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436683/class-shoes/products/whatsappimage20260414at1502502.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436684/class-shoes/products/whatsappimage20260414at1502462.jpg',
+    ],
     daysAgo: 7,
   },
   {
@@ -95,7 +106,11 @@ const products: SeedProduct[] = [
     category: 'Sandales',
     price: 91178,
     quantity: 4,
-    images: [shoe(3)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436684/class-shoes/products/whatsappimage20260414at1502461.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436685/class-shoes/products/whatsappimage20260414at150245.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436686/class-shoes/products/whatsappimage20260414at1502451.jpg',
+    ],
     daysAgo: 8,
   },
   {
@@ -103,7 +118,12 @@ const products: SeedProduct[] = [
     category: 'Bottines',
     price: 137751,
     quantity: 2,
-    images: [shoe(2)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436687/class-shoes/products/whatsappimage20260414at150246.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436688/class-shoes/products/whatsappimage20260414at1502463.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436689/class-shoes/products/whatsappimage20260414at1502471.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436690/class-shoes/products/whatsappimage20260414at150247.jpg',
+    ],
     daysAgo: 9,
   },
   {
@@ -111,7 +131,11 @@ const products: SeedProduct[] = [
     category: 'Ballerines',
     price: 78059,
     quantity: 9,
-    images: [shoe(6)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436690/class-shoes/products/whatsappimage20260414at1502483.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436691/class-shoes/products/whatsappimage20260414at1502482.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436692/class-shoes/products/whatsappimage20260414at1502481.jpg',
+    ],
     daysAgo: 10,
   },
   {
@@ -119,7 +143,12 @@ const products: SeedProduct[] = [
     category: 'Sneakers femme',
     price: 88554,
     quantity: 15,
-    images: [shoe(1), shoe(7)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436693/class-shoes/products/whatsappimage20260414at150248.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436693/class-shoes/products/whatsappimage20260414at1502474.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436694/class-shoes/products/whatsappimage20260414at1502473.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436695/class-shoes/products/whatsappimage20260414at1502491.jpg',
+    ],
     daysAgo: 11,
   },
   {
@@ -127,7 +156,11 @@ const products: SeedProduct[] = [
     category: 'Mules',
     price: 84618,
     quantity: 5,
-    images: [shoe(5)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436696/class-shoes/products/whatsappimage20260414at1502493.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436696/class-shoes/products/whatsappimage20260414at150249.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436697/class-shoes/products/whatsappimage20260414at1502492.jpg',
+    ],
     daysAgo: 12,
   },
   {
@@ -135,7 +168,11 @@ const products: SeedProduct[] = [
     category: 'Escarpins',
     price: 104297,
     quantity: 1,
-    images: [shoe(0)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436698/class-shoes/products/whatsappimage20260424at1016468.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436699/class-shoes/products/whatsappimage20260424at101646.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436699/class-shoes/products/whatsappimage20260424at1057523.jpg',
+    ],
     daysAgo: 13,
   },
   {
@@ -143,7 +180,13 @@ const products: SeedProduct[] = [
     category: 'Bottines',
     price: 163333,
     quantity: 2,
-    images: [shoe(2), shoe(4)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436700/class-shoes/products/whatsappimage20260424at1016465.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436701/class-shoes/products/whatsappimage20260424at1057521.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436702/class-shoes/products/whatsappimage20260424at1016467.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436702/class-shoes/products/whatsappimage20260424at1016472.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436703/class-shoes/products/whatsappimage20260424at101647.jpg',
+    ],
     daysAgo: 14,
   },
   {
@@ -151,7 +194,12 @@ const products: SeedProduct[] = [
     category: 'Mocassins',
     price: 110857,
     quantity: 6,
-    images: [shoe(7)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436704/class-shoes/products/whatsappimage20260424at110126.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436705/class-shoes/products/whatsappimage20260424at110249.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436706/class-shoes/products/whatsappimage20260424at110250.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436706/class-shoes/products/whatsappimage20260501at141633.jpg',
+    ],
     daysAgo: 15,
   },
   {
@@ -159,33 +207,62 @@ const products: SeedProduct[] = [
     category: 'Sandales',
     price: 58380,
     quantity: 13,
-    images: [shoe(3), shoe(6)],
+    images: [
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436707/class-shoes/products/whatsappimage20260501at1416323.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436708/class-shoes/products/whatsappimage20260501at1416322.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436708/class-shoes/products/whatsappimage20260501at141632.jpg',
+      'https://res.cloudinary.com/czvgnteb/image/upload/v1786436709/class-shoes/products/whatsappimage20260501at1416321.jpg',
+    ],
     daysAgo: 16,
   },
 ];
 
+async function ensureSafeToSeed(): Promise<void> {
+  const existingCount = await prisma.product.count();
+
+  if (existingCount > 0 && process.env.SEED_CONFIRM !== 'yes') {
+    console.error(
+      `\n🛑 ${existingCount} produits existent déjà en base.\n` +
+      'Ce script va TOUT supprimer et recréer avec les données codées en dur ci-dessus.\n' +
+      "Si tu es sûr de vouloir continuer (ex: après avoir fait un backup), relance avec :\n\n" +
+      '  SEED_CONFIRM=yes npm run seed\n',
+    );
+    process.exit(1);
+  }
+}
+
+async function resetDatabase(): Promise<void> {
+  await prisma.$executeRawUnsafe(`
+    TRUNCATE TABLE
+      "PaymentInformation", "OrderCoupon", "OrderStatus", "OrderItem", "Orders",
+      "Cart", "Wishlist", "Coupon", "ProductReview", "ProductVariant",
+      "ProductImage", "Product", "Category", "UserActivityLog", "UserRole",
+      "Roles", "Address", "UserProfile"
+    RESTART IDENTITY CASCADE;
+  `);
+}
+
+async function flushProductCache(): Promise<void> {
+  const client = await getRedisClient();
+  if (!client) return;
+
+  try {
+    const keys = await client.keys('product:*');
+    if (keys.length > 0) {
+      await client.del(keys);
+    }
+  } catch {
+    // Redis cache is best-effort here.
+  }
+}
+
 async function main() {
-  console.log('Cleaning database...');
+  console.log('Resetting database...');
 
-  await prisma.paymentInformation.deleteMany();
-  await prisma.orderCoupon.deleteMany();
-  await prisma.orderStatus.deleteMany();
-  await prisma.orderItem.deleteMany();
-  await prisma.orders.deleteMany();
-  await prisma.cart.deleteMany();
-  await prisma.wishlist.deleteMany();
-  await prisma.coupon.deleteMany();
-  await prisma.productReview.deleteMany();
-  await prisma.productImage.deleteMany();
-  await prisma.product.deleteMany();
-  await prisma.category.deleteMany();
-  await prisma.userActivityLog.deleteMany();
-  await prisma.userRole.deleteMany();
-  await prisma.roles.deleteMany();
-  await prisma.address.deleteMany();
-  await prisma.userProfile.deleteMany();
+  await ensureSafeToSeed();
+  await resetDatabase();
 
-  console.log('Database cleaned.');
+  console.log('Database reset completed.');
 
   const [adminRole, customerRole] = await Promise.all([
     prisma.roles.create({ data: { RoleName: 'ADMIN' } }),
@@ -281,6 +358,7 @@ async function main() {
 
 main()
   .then(async () => {
+    await flushProductCache();
     await prisma.$disconnect();
   })
   .catch(async (error) => {

@@ -1,0 +1,60 @@
+ProductId,ProductName,Price,Quantity,CategoryId,CategoryName,ImageId,ImageUrl
+20093,Mini sac à chaîne noir,84618.00,8,25,Sacs à main,30129,https://res.cloudinary.com/czvgnteb/image/upload/v1786436661/class-shoes/products/whatsappimage20260413at154206.jpg
+20093,Mini sac à chaîne noir,84618.00,8,25,Sacs à main,30130,https://res.cloudinary.com/czvgnteb/image/upload/v1786436662/class-shoes/products/whatsappimage20260413at1542001.jpg
+20093,Mini sac à chaîne noir,84618.00,8,25,Sacs à main,30131,https://res.cloudinary.com/czvgnteb/image/upload/v1786436663/class-shoes/products/whatsappimage20260413at154203.jpg
+20093,Mini sac à chaîne noir,84618.00,8,25,Sacs à main,30132,https://res.cloudinary.com/czvgnteb/image/upload/v1786436664/class-shoes/products/whatsappimage20260413at154205.jpg
+20094,Cabas cuir grainé ivoire,123976.00,6,26,Cabas,30133,https://res.cloudinary.com/czvgnteb/image/upload/v1786436664/class-shoes/products/whatsappimage20260413at1542181.jpg
+20094,Cabas cuir grainé ivoire,123976.00,6,26,Cabas,30134,https://res.cloudinary.com/czvgnteb/image/upload/v1786436666/class-shoes/products/whatsappimage20260413at154216.jpg
+20094,Cabas cuir grainé ivoire,123976.00,6,26,Cabas,30135,https://res.cloudinary.com/czvgnteb/image/upload/v1786436667/class-shoes/products/whatsappimage20260413at154229.jpg
+20095,Sac bandoulière rouge,104297.00,3,27,Sacs bandoulière,30136,https://res.cloudinary.com/czvgnteb/image/upload/v1786436667/class-shoes/products/whatsappimage20260413at154200.jpg
+20095,Sac bandoulière rouge,104297.00,3,27,Sacs bandoulière,30137,https://res.cloudinary.com/czvgnteb/image/upload/v1786436670/class-shoes/products/whatsappimage20260413at154219.jpg
+20095,Sac bandoulière rouge,104297.00,3,27,Sacs bandoulière,30138,https://res.cloudinary.com/czvgnteb/image/upload/v1786436670/class-shoes/products/whatsappimage20260413at154227.jpg
+20095,Sac bandoulière rouge,104297.00,3,27,Sacs bandoulière,30139,https://res.cloudinary.com/czvgnteb/image/upload/v1786436671/class-shoes/products/whatsappimage20260413at1542292.jpg
+20096,Tote structuré beige,144311.00,11,26,Cabas,30140,https://res.cloudinary.com/czvgnteb/image/upload/v1786436672/class-shoes/products/whatsappimage20260413at1542291.jpg
+20096,Tote structuré beige,144311.00,11,26,Cabas,30141,https://res.cloudinary.com/czvgnteb/image/upload/v1786436673/class-shoes/products/whatsappimage20260413at154215.jpg
+20096,Tote structuré beige,144311.00,11,26,Cabas,30142,https://res.cloudinary.com/czvgnteb/image/upload/v1786436674/class-shoes/products/whatsappimage20260413at154218.jpg
+20096,Tote structuré beige,144311.00,11,26,Cabas,30143,https://res.cloudinary.com/czvgnteb/image/upload/v1786436675/class-shoes/products/whatsappimage20260413at154158.jpg
+20096,Tote structuré beige,144311.00,11,26,Cabas,30144,https://res.cloudinary.com/czvgnteb/image/upload/v1786436676/class-shoes/products/whatsappimage20260413at154210.jpg
+20097,Sac seau camel,114792.00,5,25,Sacs à main,30145,https://res.cloudinary.com/czvgnteb/image/upload/v1786436677/class-shoes/products/whatsappimage20260413at154212.jpg
+20097,Sac seau camel,114792.00,5,25,Sacs à main,30146,https://res.cloudinary.com/czvgnteb/image/upload/v1786436677/class-shoes/products/whatsappimage20260413at154208.jpg
+20097,Sac seau camel,114792.00,5,25,Sacs à main,30147,https://res.cloudinary.com/czvgnteb/image/upload/v1786436678/class-shoes/products/whatsappimage20260413at1542071.jpg
+20098,Pochette rose poudré,64940.00,12,25,Sacs à main,30148,https://res.cloudinary.com/czvgnteb/image/upload/v1786436679/class-shoes/products/whatsappimage20260413at154207.jpg
+20098,Pochette rose poudré,64940.00,12,25,Sacs à main,30149,https://res.cloudinary.com/czvgnteb/image/upload/v1786436680/class-shoes/products/whatsappimage20260413at154209.jpg
+20098,Pochette rose poudré,64940.00,12,25,Sacs à main,30150,https://res.cloudinary.com/czvgnteb/image/upload/v1786436681/class-shoes/products/whatsappimage20260414at1502501.jpg
+20099,Escarpins slingback noirs,97738.00,7,28,Escarpins,30151,https://res.cloudinary.com/czvgnteb/image/upload/v1786436681/class-shoes/products/whatsappimage20260414at1502503.jpg
+20099,Escarpins slingback noirs,97738.00,7,28,Escarpins,30152,https://res.cloudinary.com/czvgnteb/image/upload/v1786436682/class-shoes/products/whatsappimage20260414at150250.jpg
+20099,Escarpins slingback noirs,97738.00,7,28,Escarpins,30153,https://res.cloudinary.com/czvgnteb/image/upload/v1786436683/class-shoes/products/whatsappimage20260414at1502502.jpg
+20099,Escarpins slingback noirs,97738.00,7,28,Escarpins,30154,https://res.cloudinary.com/czvgnteb/image/upload/v1786436684/class-shoes/products/whatsappimage20260414at1502462.jpg
+20100,Sandales à talon nude,91178.00,4,29,Sandales,30155,https://res.cloudinary.com/czvgnteb/image/upload/v1786436684/class-shoes/products/whatsappimage20260414at1502461.jpg
+20100,Sandales à talon nude,91178.00,4,29,Sandales,30156,https://res.cloudinary.com/czvgnteb/image/upload/v1786436685/class-shoes/products/whatsappimage20260414at150245.jpg
+20100,Sandales à talon nude,91178.00,4,29,Sandales,30157,https://res.cloudinary.com/czvgnteb/image/upload/v1786436686/class-shoes/products/whatsappimage20260414at1502451.jpg
+20101,Bottines cuir chocolat,137751.00,2,30,Bottines,30158,https://res.cloudinary.com/czvgnteb/image/upload/v1786436687/class-shoes/products/whatsappimage20260414at150246.jpg
+20101,Bottines cuir chocolat,137751.00,2,30,Bottines,30159,https://res.cloudinary.com/czvgnteb/image/upload/v1786436688/class-shoes/products/whatsappimage20260414at1502463.jpg
+20101,Bottines cuir chocolat,137751.00,2,30,Bottines,30160,https://res.cloudinary.com/czvgnteb/image/upload/v1786436689/class-shoes/products/whatsappimage20260414at1502471.jpg
+20101,Bottines cuir chocolat,137751.00,2,30,Bottines,30161,https://res.cloudinary.com/czvgnteb/image/upload/v1786436690/class-shoes/products/whatsappimage20260414at150247.jpg
+20102,Ballerines ivoire,78059.00,9,31,Ballerines,30162,https://res.cloudinary.com/czvgnteb/image/upload/v1786436690/class-shoes/products/whatsappimage20260414at1502483.jpg
+20102,Ballerines ivoire,78059.00,9,31,Ballerines,30163,https://res.cloudinary.com/czvgnteb/image/upload/v1786436691/class-shoes/products/whatsappimage20260414at1502482.jpg
+20102,Ballerines ivoire,78059.00,9,31,Ballerines,30164,https://res.cloudinary.com/czvgnteb/image/upload/v1786436692/class-shoes/products/whatsappimage20260414at1502481.jpg
+20103,Sneakers femme blanches,88554.00,15,32,Sneakers femme,30165,https://res.cloudinary.com/czvgnteb/image/upload/v1786436693/class-shoes/products/whatsappimage20260414at150248.jpg
+20103,Sneakers femme blanches,88554.00,15,32,Sneakers femme,30166,https://res.cloudinary.com/czvgnteb/image/upload/v1786436693/class-shoes/products/whatsappimage20260414at1502474.jpg
+20103,Sneakers femme blanches,88554.00,15,32,Sneakers femme,30167,https://res.cloudinary.com/czvgnteb/image/upload/v1786436694/class-shoes/products/whatsappimage20260414at1502473.jpg
+20103,Sneakers femme blanches,88554.00,15,32,Sneakers femme,30168,https://res.cloudinary.com/czvgnteb/image/upload/v1786436695/class-shoes/products/whatsappimage20260414at1502491.jpg
+20104,Mules camel,84618.00,5,33,Mules,30169,https://res.cloudinary.com/czvgnteb/image/upload/v1786436696/class-shoes/products/whatsappimage20260414at1502493.jpg
+20104,Mules camel,84618.00,5,33,Mules,30170,https://res.cloudinary.com/czvgnteb/image/upload/v1786436696/class-shoes/products/whatsappimage20260414at150249.jpg
+20104,Mules camel,84618.00,5,33,Mules,30171,https://res.cloudinary.com/czvgnteb/image/upload/v1786436697/class-shoes/products/whatsappimage20260414at1502492.jpg
+20105,Escarpins rouges vernis,104297.00,1,28,Escarpins,30172,https://res.cloudinary.com/czvgnteb/image/upload/v1786436698/class-shoes/products/whatsappimage20260424at1016468.jpg
+20105,Escarpins rouges vernis,104297.00,1,28,Escarpins,30173,https://res.cloudinary.com/czvgnteb/image/upload/v1786436699/class-shoes/products/whatsappimage20260424at101646.jpg
+20105,Escarpins rouges vernis,104297.00,1,28,Escarpins,30174,https://res.cloudinary.com/czvgnteb/image/upload/v1786436699/class-shoes/products/whatsappimage20260424at1057523.jpg
+20106,Bottes hautes noires,163333.00,2,30,Bottines,30175,https://res.cloudinary.com/czvgnteb/image/upload/v1786436700/class-shoes/products/whatsappimage20260424at1016465.jpg
+20106,Bottes hautes noires,163333.00,2,30,Bottines,30176,https://res.cloudinary.com/czvgnteb/image/upload/v1786436701/class-shoes/products/whatsappimage20260424at1057521.jpg
+20106,Bottes hautes noires,163333.00,2,30,Bottines,30177,https://res.cloudinary.com/czvgnteb/image/upload/v1786436702/class-shoes/products/whatsappimage20260424at1016467.jpg
+20106,Bottes hautes noires,163333.00,2,30,Bottines,30178,https://res.cloudinary.com/czvgnteb/image/upload/v1786436702/class-shoes/products/whatsappimage20260424at1016472.jpg
+20106,Bottes hautes noires,163333.00,2,30,Bottines,30179,https://res.cloudinary.com/czvgnteb/image/upload/v1786436703/class-shoes/products/whatsappimage20260424at101647.jpg
+20107,Mocassins cuir brun,110857.00,6,34,Mocassins,30180,https://res.cloudinary.com/czvgnteb/image/upload/v1786436704/class-shoes/products/whatsappimage20260424at110126.jpg
+20107,Mocassins cuir brun,110857.00,6,34,Mocassins,30181,https://res.cloudinary.com/czvgnteb/image/upload/v1786436705/class-shoes/products/whatsappimage20260424at110249.jpg
+20107,Mocassins cuir brun,110857.00,6,34,Mocassins,30182,https://res.cloudinary.com/czvgnteb/image/upload/v1786436706/class-shoes/products/whatsappimage20260424at110250.jpg
+20107,Mocassins cuir brun,110857.00,6,34,Mocassins,30183,https://res.cloudinary.com/czvgnteb/image/upload/v1786436706/class-shoes/products/whatsappimage20260501at141633.jpg
+20108,Sandales plates dorées,58380.00,13,29,Sandales,30184,https://res.cloudinary.com/czvgnteb/image/upload/v1786436707/class-shoes/products/whatsappimage20260501at1416323.jpg
+20108,Sandales plates dorées,58380.00,13,29,Sandales,30185,https://res.cloudinary.com/czvgnteb/image/upload/v1786436708/class-shoes/products/whatsappimage20260501at1416322.jpg
+20108,Sandales plates dorées,58380.00,13,29,Sandales,30186,https://res.cloudinary.com/czvgnteb/image/upload/v1786436708/class-shoes/products/whatsappimage20260501at141632.jpg
+20108,Sandales plates dorées,58380.00,13,29,Sandales,30187,https://res.cloudinary.com/czvgnteb/image/upload/v1786436709/class-shoes/products/whatsappimage20260501at1416321.jpg

@@ -17,7 +17,6 @@ export const validate = (schema: ZodSchema) => {
       if (typeof parsed === 'object' && parsed !== null) {
         const values = parsed as { body?: unknown; query?: unknown; params?: unknown };
         if (values.body) req.body = values.body;
-        if (values.query) req.query = values.query as Request['query'];
         if (values.params) req.params = values.params as Request['params'];
       }
 

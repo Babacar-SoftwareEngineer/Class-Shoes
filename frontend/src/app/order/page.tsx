@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, startTransition, useEffect, useState } from 'react';
 import { useCart } from '../../hooks/useCart';
 import { formatPrice } from '../../lib/catalog';
 import { normalizeImageSrc } from '../../lib/image';
@@ -33,8 +33,10 @@ export default function OrderPage() {
     }
 
     if (user) {
-      setFullName((current) => current || user.DisplayName || [user.FirstName, user.LastName].filter(Boolean).join(' '));
-      setEmail((current) => current || user.Email);
+      startTransition(() => {
+        setFullName((current) => current || user.DisplayName || [user.FirstName, user.LastName].filter(Boolean).join(' '));
+        setEmail((current) => current || user.Email);
+      });
     }
   }, [user, isMounted, router]);
 
